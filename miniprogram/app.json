@@ -5,7 +5,8 @@
     "pages/record/index",
     "pages/mine/index",
     "pages/project-add/index",
-    "pages/wedding-create/index"
+    "pages/wedding-create/index",
+    "pages/record-add/index"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
