@@ -1,0 +1,161 @@
+<!-- Custom Navigation Header -->
+<view wx:if="{{hasWedding}}" class="custom-header" style="padding-top: {{statusBarHeight + 10}}px; height: {{navBarHeight}}px; background-color: {{headerBg}};">
+  <view class="header-content">
+    <text class="header-title">标题</text>
+    <view class="header-avatars">
+      <image class="avatar" src="https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0" />
+      <image class="avatar avatar-2" src="https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0" />
+    </view>
+  </view>
+</view>
+<scroll-view scroll-y style="height: 100vh;" bindscroll="onScroll">
+  <view wx:if="{{isLoading}}" class="loading-container">
+    <text>加载中...</text>
+  </view>
+  <block wx:elif="{{!hasWedding}}">
+    <view class="splash-container">
+      <view class="splash-header">
+        <text class="splash-title">婚礼财务管家</text>
+        <text class="splash-subtitle">让备婚更简单</text>
+      </view>
+      <view class="splash-features">
+        <view class="feature-item">
+          <image class="feature-icon" src="../../images/index/icon1.png"></image>
+          <text class="feature-text">清晰的预算管理</text>
+        </view>
+        <view class="feature-item">
+          <image class="feature-icon" src="../../images/index/icon2.png"></image>
+          <text class="feature-text">项目分类统计</text>
+        </view>
+        <view class="feature-item">
+          <image class="feature-icon" src="../../images/index/icon3.png"></image>
+          <text class="feature-text">双人协同管理</text>
+        </view>
+      </view>
+      <view class="splash-footer">
+        <view class="btn-start" bindtap="handleStartWedding">开启我的婚礼</view>
+      </view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="page-container">
+      <!-- Header Placeholder -->
+      <view style="padding-top: {{statusBarHeight + 10}}px; height: {{navBarHeight}}px; margin-bottom: 30rpx;"></view>
+      <!-- Budget Card -->
+      <view class="card budget-card">
+        <view class="card-header">
+          <view class="icon-wrap">
+            <text class="icon">📊</text>
+          </view>
+          <text class="card-title">预算进度</text>
+        </view>
+        <view class="budget-content">
+          <view class="budget-left">
+            <view class="budget-percent">
+              <text>45</text>
+              <text class="percent-sign">%</text>
+            </view>
+            <!-- <text class="budget-label">已用预算</text> -->
+          </view>
+          <view class="budget-right">
+            <view class="progress-bar-bg">
+              <view class="progress-bar-fill" style="width: 45%;"></view>
+            </view>
+            <view class="progress-labels">
+              <text>0%</text>
+              <text>45%</text>
+              <text>100%</text>
+            </view>
+          </view>
+        </view>
+        <view class="divider"></view>
+        <view class="budget-footer">
+          <text class="footer-text">
+            <text>已支出</text>
+            <text class="highlight">¥45,000</text>
+            <text>/总预算 ¥100,000</text>
+          </text>
+        </view>
+      </view>
+      <!-- Countdown Card -->
+      <view class="card countdown-card">
+        <view class="countdown-info">
+          <view class="card-header">
+            <view class="icon-wrap">
+              <text class="icon">📅</text>
+            </view>
+            <text class="card-title">倒计时</text>
+            <!-- <text class="card-title">婚礼倒计时</text> -->
+          </view>
+          <view class="countdown-days">
+            <text class="days-num">145</text>
+            <text class="days-unit">天</text>
+          </view>
+          <text class="countdown-label">距离婚礼还有</text>
+        </view>
+        <view class="countdown-img-wrap">
+          <!-- Placeholder for calendar illustration -->
+          <view class="calendar-img-placeholder">
+            <image src="../../images/index/indexImg1.png"></image>
+          </view>
+        </view>
+      </view>
+      <!-- Action Buttons -->
+      <view class="action-buttons">
+        <view class="btn btn-primary" bindtap="goToAddExpense">
+          <text class="btn-icon">＋</text>
+          <text>记一笔</text>
+        </view>
+        <view class="btn btn-secondary" bindtap="goToAddProject">
+          <text class="btn-icon">＋</text>
+          <text>新增项目</text>
+        </view>
+      </view>
+      <!-- Recent Expenses -->
+      <view class="recent-section">
+        <view class="section-header">
+          <text class="section-title">最近支出</text>
+          <text class="section-more">查看全部</text>
+        </view>
+        <view class="expense-list">
+          <!-- Item 1 -->
+          <view class="expense-item">
+            <view class="item-icon-wrap">
+              <text class="item-icon">📷</text>
+            </view>
+            <view class="item-info">
+              <text class="item-name">婚纱摄影 定金</text>
+              <text class="item-desc">今天 14:30 · 张三</text>
+            </view>
+            <view class="item-amount highlight">-¥5,000</view>
+            <text class="item-arrow">></text>
+          </view>
+          <!-- Item 2 -->
+          <view class="expense-item">
+            <view class="item-icon-wrap bg-blue">
+              <text class="item-icon">🏨</text>
+            </view>
+            <view class="item-info">
+              <text class="item-name">婚宴酒店 预订</text>
+              <text class="item-desc">昨天 10:20 · 李四</text>
+            </view>
+            <view class="item-amount highlight">-¥30,000</view>
+            <text class="item-arrow">></text>
+          </view>
+          <!-- Item 3 -->
+          <view class="expense-item">
+            <view class="item-icon-wrap bg-yellow">
+              <text class="item-icon">👗</text>
+            </view>
+            <view class="item-info">
+              <text class="item-name">婚纱礼服 试纱</text>
+              <text class="item-desc">05-15 16:45 · 王五</text>
+            </view>
+            <view class="item-amount highlight">-¥3,200</view>
+            <text class="item-arrow">></text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+</scroll-view>

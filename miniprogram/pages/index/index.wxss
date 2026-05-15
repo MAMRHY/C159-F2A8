@@ -1,0 +1,414 @@
+.page-container {
+  padding: 0 32rpx;
+  padding-bottom: 40rpx;
+}
+
+/* Splash Page */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.splash-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background: #fff;
+  padding: 100rpx 40rpx;
+  box-sizing: border-box;
+}
+
+.splash-header {
+  margin-top: 100rpx;
+  margin-bottom: 120rpx;
+  text-align: center;
+}
+
+.splash-title {
+  font-size: 56rpx;
+  font-weight: bold;
+  color: #111;
+  display: block;
+  margin-bottom: 24rpx;
+}
+
+.splash-subtitle {
+  font-size: 32rpx;
+  color: #999;
+}
+
+.splash-features {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 80rpx;
+  box-sizing: border-box;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 60rpx;
+}
+
+.feature-icon {
+  width: 96rpx;
+  height: 96rpx;
+  margin-right: 40rpx;
+}
+
+.feature-text {
+  font-size: 32rpx;
+  color: #333;
+}
+
+.splash-footer {
+  margin-top: auto;
+  margin-bottom: 60rpx;
+  width: 100%;
+  padding: 0 40rpx;
+  box-sizing: border-box;
+}
+
+.btn-start {
+  background: #F48FB1;
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: 500;
+  text-align: center;
+  border-radius: 48rpx;
+  padding: 28rpx 0;
+  width: 100%;
+  box-shadow: 0 8rpx 24rpx rgba(244, 143, 177, 0.3);
+}
+
+/* Header */
+.custom-header {
+  display: flex;
+  align-items: center;
+  box-sizing: content-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 32rpx;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.header-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.header-avatars {
+  margin-top: 10rpx;
+  display: flex;
+  position: relative;
+}
+
+.avatar {
+  width: 54rpx;
+  height: 54rpx;
+  border-radius: 50%;
+  border: 4rpx solid #fff;
+}
+
+.avatar-2 {
+  margin-left: -16rpx;
+}
+
+/* Common Card */
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.02);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.icon-wrap {
+  width: 40rpx;
+  height: 40rpx;
+  background: #FFF0F4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12rpx;
+}
+
+.icon {
+  font-size: 20rpx;
+}
+
+.card-title {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Budget Card */
+.budget-content {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.budget-left {
+  width: 140rpx;
+  display: flex;
+  /* flex-direction: column; */
+}
+
+.budget-percent {
+  font-size: 64rpx;
+  color: #FF85A1;
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 8rpx;
+  display: flex;
+  align-items: baseline;
+}
+
+.percent-sign {
+  font-size: 32rpx;
+}
+
+.budget-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.budget-right {
+  flex: 1;
+  margin-left: 24rpx;
+}
+
+.progress-bar-bg {
+  height: 24rpx;
+  background: #FFF0F4;
+  border-radius: 12rpx;
+  overflow: hidden;
+  margin-bottom: 12rpx;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF85A1 0%, #FFB6C1 100%);
+  border-radius: 12rpx;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20rpx;
+  color: #999;
+}
+
+.divider {
+  height: 2rpx;
+  background: #F5F5F5;
+  margin: 24rpx 0;
+}
+
+.budget-footer {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.highlight {
+  color: #FF85A1;
+}
+
+/* Countdown Card */
+.countdown-card {
+  display: flex;
+  justify-content: space-between;
+}
+
+.countdown-info {
+  flex: 1;
+}
+
+.countdown-days {
+  margin-bottom: 8rpx;
+}
+
+.days-num {
+  font-size: 80rpx;
+  color: #FF85A1;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.days-unit {
+  font-size: 28rpx;
+  color: #333;
+  margin-left: 8rpx;
+  font-weight: 500;
+}
+
+.countdown-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.countdown-img-wrap {
+  width: 230rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-img-placeholder {
+  width: 230rpx;
+  height: 180rpx;
+}
+
+.calendar-img-placeholder image {
+  width: 100%;
+  height: 100%;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40rpx;
+}
+
+.btn {
+  flex: 1;
+  height: 96rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #fff;
+}
+
+.btn-icon {
+  margin-right: 12rpx;
+  font-size: 36rpx;
+  font-weight: 300;
+}
+
+.btn-primary {
+  background: #FF85A1;
+  margin-right: 20rpx;
+  box-shadow: 0 8rpx 20rpx rgba(255, 133, 161, 0.3);
+}
+
+.btn-secondary {
+  background: #FF9EAB;
+  box-shadow: 0 8rpx 20rpx rgba(255, 158, 171, 0.3);
+}
+
+/* Recent Section */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-more {
+  font-size: 24rpx;
+  color: #FF85A1;
+}
+
+.expense-list {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 0 32rpx;
+}
+
+.expense-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 0;
+  border-bottom: 2rpx solid #F5F5F5;
+}
+
+.expense-item:last-child {
+  border-bottom: none;
+}
+
+.item-icon-wrap {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  background: #FFF0F4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+}
+
+.bg-blue {
+  background: #F0F6FF;
+}
+
+.bg-yellow {
+  background: #FFF8E5;
+}
+
+.item-icon {
+  font-size: 40rpx;
+}
+
+.item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.item-desc {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.item-amount {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-right: 16rpx;
+}
+
+.item-arrow {
+  font-size: 24rpx;
+  color: #CCC;
+}

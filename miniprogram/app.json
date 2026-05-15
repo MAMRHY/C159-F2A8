@@ -1,0 +1,43 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/projects/index",
+    "pages/record/index",
+    "pages/mine/index",
+    "pages/project-add/index",
+    "pages/wedding-create/index"
+  ],
+  "window": {
+    "backgroundColor": "#F6F6F6",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "婚礼财务管家",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#A0A0A0",
+    "selectedColor": "#FF85A1",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/projects/index",
+        "text": "项目"
+      },
+      {
+        "pagePath": "pages/record/index",
+        "text": "记账"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

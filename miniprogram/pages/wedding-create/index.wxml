@@ -1,0 +1,54 @@
+<view class="create-container">
+  <!-- Top Image -->
+  <view class="top-image-wrap">
+    <image class="top-image" src="../../images/index/hunli.png" mode="aspectFit"></image>
+  </view>
+  <!-- Form -->
+  <view class="form-container">
+    <view class="form-group">
+      <view class="form-label">
+        婚礼日期
+        <text class="required">*</text>
+      </view>
+      <picker mode="date" bindchange="onDateChange" value="{{date}}">
+        <view class="form-input-wrap">
+          <image class="input-icon" src="../../images/index/i_day.png"></image>
+          <text class="input-text {{date ? '' : 'placeholder'}}">{{date ? date : '选择婚礼日期'}}</text>
+        </view>
+      </picker>
+    </view>
+    <view class="form-group">
+      <view class="form-label">
+        婚礼地点
+        <text class="required">*</text>
+      </view>
+      <view class="form-input-wrap">
+        <image class="input-icon" src="../../images/index/i_local.png"></image>
+        <input class="form-input" placeholder="北京 · 悦榕庄" value="{{location}}" bindinput="onLocationInput" />
+      </view>
+    </view>
+    <view class="form-group">
+      <view class="form-label">
+        整体预算
+        <text class="optional">{{amountText}}</text>
+      </view>
+      <view class="form-input-wrap">
+        <image class="input-icon" src="../../images/index/i_gold.png"></image>
+        <input class="form-input" type="number" placeholder="输入预算金额" value="{{budget}}" bindinput="onBudgetInput" />
+        <text class="unit-text">元</text>
+      </view>
+    </view>
+  </view>
+  <!-- Tip -->
+  <view class="tip-wrap">
+    <image class="tip-icon" src="../../images/index/i-tip.png"></image>
+    <text class="tip-text">
+      <text class="tip-highlight">提示：</text>
+      创建后可邀请另一半加入共同管理婚礼预算
+    </text>
+  </view>
+  <!-- Buttons -->
+  <view class="footer-buttons">
+    <view class="btn-create" bindtap="submitCreate">{{isEdit ? '保存' : '创建婚礼'}}</view>
+  </view>
+</view>

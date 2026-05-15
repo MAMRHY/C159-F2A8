@@ -1,0 +1,89 @@
+<view class="page-container">
+  <!-- Custom Navigation Header -->
+  <view class="custom-header" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
+    <view class="header-content" style="margin-right: {{windowWidth - capsuleLeft + 10}}px;">
+      <text class="header-title">项目管理</text>
+      <view class="add-btn" bindtap="goToAddProject">
+        <text class="add-icon">＋</text>
+        <text>新增项目</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tabs -->
+  <scroll-view class="tabs-scroll" scroll-x="true" show-scrollbar="false">
+    <view class="tabs">
+      <view class="tab active">全部</view>
+      <view class="tab">全部付清</view>
+      <view class="tab">部分付清</view>
+      <view class="tab">未开始付款</view>
+    </view>
+  </scroll-view>
+
+  <!-- Project List -->
+  <view class="project-list">
+    <!-- Item 1 -->
+    <view class="project-card">
+      <view class="project-info">
+        <text class="project-name">酒席-天鹅酒店</text>
+        <text class="project-leader">负责人：张晓玥</text>
+      </view>
+      <view class="project-amount-status">
+        <view class="amount-wrap">
+          <text class="amount-label">总金额</text>
+          <text class="amount-value">¥88,888.00</text>
+        </view>
+        <view class="status-pill status-paid">全部付清</view>
+      </view>
+      <text class="item-arrow">></text>
+    </view>
+    
+    <!-- Item 2 -->
+    <view class="project-card">
+      <view class="project-info">
+        <text class="project-name">婚纱摄影-定金</text>
+        <text class="project-leader">负责人：晓敏</text>
+      </view>
+      <view class="project-amount-status">
+        <view class="amount-wrap">
+          <text class="amount-label">总金额</text>
+          <text class="amount-value">¥5,000.00</text>
+        </view>
+        <view class="status-pill status-partial">部分付清</view>
+      </view>
+      <text class="item-arrow">></text>
+    </view>
+
+    <!-- Item 3 -->
+    <view class="project-card">
+      <view class="project-info">
+        <text class="project-name">婚礼策划</text>
+        <text class="project-leader">负责人：李想</text>
+      </view>
+      <view class="project-amount-status">
+        <view class="amount-wrap">
+          <text class="amount-label">总金额</text>
+          <text class="amount-value">¥20,000.00</text>
+        </view>
+        <view class="status-pill status-partial">部分付清</view>
+      </view>
+      <text class="item-arrow">></text>
+    </view>
+
+    <!-- Item 4 -->
+    <view class="project-card">
+      <view class="project-info">
+        <text class="project-name">婚车租赁</text>
+        <text class="project-leader">负责人：志强</text>
+      </view>
+      <view class="project-amount-status">
+        <view class="amount-wrap">
+          <text class="amount-label">总金额</text>
+          <text class="amount-value">¥6,000.00</text>
+        </view>
+        <view class="status-pill status-unpaid">未开始付款</view>
+      </view>
+      <text class="item-arrow">></text>
+    </view>
+  </view>
+</view>
