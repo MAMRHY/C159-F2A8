@@ -23,7 +23,7 @@
   <!-- Project List -->
   <view class="project-list">
     <!-- Item 1 -->
-    <view class="project-card">
+    <view class="project-card" bindtap="goToEditProject" data-id="1">
       <view class="project-info">
         <text class="project-name">酒席-天鹅酒店</text>
         <text class="project-leader">负责人：张晓玥</text>

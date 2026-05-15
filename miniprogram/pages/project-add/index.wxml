@@ -1,0 +1,60 @@
+<view class="page-container">
+  <view class="form-container">
+    <view class="form-item">
+      <view class="form-label">
+        <text class="required">*</text>
+        项目名称
+      </view>
+      <view class="form-input-wrap">
+        <input class="form-input" placeholder="请输入项目名称" value="{{name}}" bindinput="onInput" data-field="name" />
+      </view>
+    </view>
+    <view class="form-item">
+      <view class="form-label">
+        <text class="required">*</text>
+        项目类型
+      </view>
+      <view class="form-input-wrap" bindtap="showTypePicker">
+        <view class="form-input {{typeId ? '' : 'placeholder'}}">{{typeName || '请选择项目类型'}}</view>
+        <text class="arrow-icon">v</text>
+      </view>
+    </view>
+    <view class="form-item">
+      <view class="form-label">
+        <text class="required">*</text>
+        负责人
+      </view>
+      <view class="form-input-wrap">
+        <input class="form-input" placeholder="请输入负责人姓名" value="{{leader}}" bindinput="onInput" data-field="leader" />
+      </view>
+    </view>
+    <view class="form-item">
+      <view class="form-label">备注</view>
+      <view class="form-textarea-wrap">
+        <textarea class="form-textarea" placeholder="请输入备注信息（选填）" value="{{remark}}" bindinput="onInput" data-field="remark"></textarea>
+      </view>
+    </view>
+    <view class="submit-btn" bindtap="onSubmit">保存</view>
+  </view>
+  <!-- Project Type Picker Modal -->
+  <view class="type-picker-mask" wx:if="{{showTypeModal}}" bindtap="hideTypePicker"></view>
+  <view class="type-picker-modal" wx:if="{{showTypeModal}}">
+    <view class="type-picker-header">
+      <text class="type-picker-title">选择项目类型</text>
+      <view class="type-picker-close" bindtap="hideTypePicker">✕</view>
+    </view>
+    <view class="type-search-bar">
+      <input class="type-search-input" placeholder="搜索或输入新类型" value="{{typeSearchKey}}" bindinput="onSearchTypeInput" />
+      <view class="type-add-btn" wx:if="{{typeSearchKey && !hasExactMatch}}" bindtap="createNewType">
+        创建 "{{typeSearchKey}}"
+      </view>
+    </view>
+    <scroll-view class="type-list" scroll-y="true">
+      <view class="type-item {{item._id === typeId ? 'active' : ''}}" wx:for="{{filteredTypes}}" wx:key="_id" bindtap="onSelectType" data-item="{{item}}">
+        <text>{{item.name}}</text>
+        <text class="check-icon" wx:if="{{item._id === typeId}}">✓</text>
+      </view>
+      <view class="type-empty" wx:if="{{filteredTypes.length === 0}}">无匹配结果，点击上方按钮创建</view>
+    </scroll-view>
+  </view>
+</view>

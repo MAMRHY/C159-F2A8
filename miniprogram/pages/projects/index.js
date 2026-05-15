@@ -25,5 +25,12 @@ Page({
     wx.navigateTo({
       url: '/pages/project-add/index',
     })
+  },
+
+  goToEditProject(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `/pages/project-add/index?id=${id}`,
+    })
   }
 })

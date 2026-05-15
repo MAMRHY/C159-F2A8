@@ -22,7 +22,7 @@ App({
     }
   },
 
-  loginAndCheckWedding: async function() {
+  loginAndCheckWedding: async function () {
     try {
       const res = await wx.cloud.callFunction({
         name: 'quickstartFunctions',
@@ -32,7 +32,7 @@ App({
       this.globalData.openid = openid;
 
       const db = wx.cloud.database();
-      
+
       // 更新 users 集合
       const userRes = await db.collection('users').where({ _openid: openid }).get();
       if (userRes.data.length === 0) {
@@ -53,7 +53,7 @@ App({
       // 检查 wedding_info
       const weddingRes = await db.collection('wedding_info').where({ _openid: openid }).get();
       this.globalData.hasWedding = weddingRes.data.length > 0;
-      
+
       return this.globalData;
     } catch (e) {
       console.error("Login failed", e);
