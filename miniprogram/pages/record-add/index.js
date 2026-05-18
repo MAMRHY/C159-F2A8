@@ -5,7 +5,23 @@ Page({
    * 页面的初始数据
    */
   data: {
+    showMore: false,
+    paymentMethod: '',
+    paymentDate: '',
+    paymentOptions: ['微信', '支付宝', '银行卡转账', '现金']
+  },
 
+  toggleMoreDetails() {
+    this.setData({ showMore: !this.data.showMore });
+  },
+
+  onPaymentMethodChange(e) {
+    const index = e.detail.value;
+    this.setData({ paymentMethod: this.data.paymentOptions[index] });
+  },
+
+  onDateChange(e) {
+    this.setData({ paymentDate: e.detail.value });
   },
 
   /**

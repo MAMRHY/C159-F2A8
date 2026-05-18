@@ -1,4 +1,9 @@
 {
   "navigationBarTitleText": "记一笔",
-  "navigationBarBackgroundColor": "#FCF8F9"
+  "navigationBarBackgroundColor": "#FCF8F9",
+  "usingComponents": {
+    "l-button": "lin-ui/button/index",
+    "l-list": "lin-ui/list/index",
+    "l-icon": "lin-ui/icon/index"
+  }
 }

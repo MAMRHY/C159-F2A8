@@ -5,6 +5,10 @@
   box-sizing: border-box;
 }
 
+.l-list-no-border {
+  border-bottom: none !important;
+}
+
 /* Card 1: Form */
 .form-card {
   background-color: #fff;
@@ -13,74 +17,9 @@
   margin-bottom: 30rpx;
 }
 
-.form-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 110rpx;
-}
-
-.form-divider {
-  height: 1px;
-  background-color: #FAFAFA;
-}
-
-.item-left {
-  display: flex;
-  align-items: center;
-}
-
-.icon-wrap {
-  width: 56rpx;
-  height: 56rpx;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 20rpx;
-  font-size: 28rpx;
-}
-
-.icon-wrap.pink {
-  background-color: #FDF1EF;
-  color: #E88B9E;
-}
-.icon-wrap.orange {
-  background-color: #FFF5E5;
-  color: #FFA75C;
-}
-.icon-wrap.blue {
-  background-color: #F0F5FF;
-  color: #5C95FF;
-}
-.icon-wrap.green {
-  background-color: #F0FAF5;
-  color: #5CBD86;
-}
-
-.label {
-  font-size: 28rpx;
-  color: #333;
-}
-
 .item-right {
   display: flex;
   align-items: center;
-}
-
-.placeholder {
-  font-size: 28rpx;
-  color: #CCC;
-  margin-right: 10rpx;
-}
-
-.arrow {
-  font-size: 28rpx;
-  color: #CCC;
-  font-family: 'Courier New', Courier, monospace;
-}
-.arrow.down {
-  transform: scaleY(0.7);
 }
 
 .amount-symbol {
@@ -112,11 +51,13 @@
 .detail-card {
   background-color: #fff;
   border-radius: 24rpx;
-  padding: 30rpx;
-  margin-bottom: 30rpx;
+}
+
+.detail-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 30rpx;
 }
 
 .detail-title {
@@ -129,7 +70,7 @@
   background-color: #fff;
   border-radius: 24rpx;
   padding: 30rpx;
-  margin-bottom: 60rpx;
+  margin: 30rpx auto 60rpx;
 }
 
 .photo-title {
@@ -161,11 +102,6 @@
   margin-bottom: 16rpx;
 }
 
-.upload-icon {
-  width: 40rpx;
-  height: 40rpx;
-}
-
 .upload-text {
   font-size: 26rpx;
   color: #666;
@@ -184,17 +120,10 @@
   align-items: center;
 }
 
-.submit-btn {
-  width: 100%;
-  background-color: #E88B9E;
-  color: #fff;
-  font-size: 32rpx;
-  font-weight: 500;
-  text-align: center;
-  padding: 24rpx 0;
-  border-radius: 40rpx;
+/* .submit-btn-l {
+  width: 100% !important;
   margin-bottom: 30rpx;
-}
+} */
 
 .safe-tip {
   font-size: 22rpx;
