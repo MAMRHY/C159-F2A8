@@ -1,82 +1,262 @@
 // pages/record-add/index.js
-Page({
+const db = wx.cloud.database()
 
-  /**
-   * 页面的初始数据
-   */
+Page({
   data: {
     showMore: false,
     paymentMethod: '',
     paymentDate: '',
-    paymentOptions: ['微信', '支付宝', '银行卡转账', '现金']
+    paymentOptions: ['微信', '支付宝', '银行卡转账', '现金'],
+    projects: [], //关联项目列表
+    filteredProjects: [],
+    expensesTypes: [], // 费用类型
+    filteredTypes: [],
+    projectId: '',
+    projectName: '',
+    expenseTypeId: '',
+    expenseTypeName: '',
+    amount: '',
+    paid: false,
+    imageUrls: [],
+    imageFileIDs: [],
+    showProjectModal: false,
+    showTypeModal: false,
+    projectSearchKey: '',
+    typeSearchKey: '',
+    hasExactMatch: false,
+  },
+
+  onLoad() {
+    this.fetchProjects()
+    this.fetchExpenseTypes()
+  },
+
+  async fetchProjects() {
+    try {
+      const res = await db.collection('projects').field({ name: true }).get()
+      this.setData({
+        projects: res.data,
+        filteredProjects: res.data,
+      })
+    } catch (e) {
+      console.error('fetchProjects', e)
+    }
+  },
+
+  async fetchExpenseTypes() {
+    try {
+      const res = await db.collection('expenses-type').get()
+      this.setData({
+        expensesTypes: res.data,
+        filteredTypes: res.data,
+      })
+    } catch (e) {
+      console.error('fetchExpenseTypes', e)
+    }
   },
 
   toggleMoreDetails() {
-    this.setData({ showMore: !this.data.showMore });
+    this.setData({ showMore: !this.data.showMore })
   },
 
   onPaymentMethodChange(e) {
-    const index = e.detail.value;
-    this.setData({ paymentMethod: this.data.paymentOptions[index] });
+    const index = e.detail.value
+    this.setData({ paymentMethod: this.data.paymentOptions[index] })
   },
 
   onDateChange(e) {
-    this.setData({ paymentDate: e.detail.value });
+    this.setData({ paymentDate: e.detail.value })
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  showProjectPicker() {
+    this.setData({
+      showProjectModal: true,
+      projectSearchKey: '',
+      filteredProjects: this.data.projects,
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  hideProjectPicker() {
+    this.setData({ showProjectModal: false })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  showTypePicker() {
+    this.setData({
+      showTypeModal: true,
+      typeSearchKey: '',
+      filteredTypes: this.data.expensesTypes,
+      hasExactMatch: false,
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  hideTypePicker() {
+    this.setData({ showTypeModal: false })
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+  onSearchProjectInput(e) {
+    const key = e.detail.value
+    const filtered = this.data.projects.filter(item => item.name.includes(key))
+    this.setData({
+      projectSearchKey: key,
+      filteredProjects: filtered,
+    })
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
+  onSearchTypeInput(e) {
+    const key = e.detail.value
+    const filtered = this.data.expensesTypes.filter(item => item.name.includes(key))
+    const hasExactMatch = this.data.expensesTypes.some(item => item.name === key)
+    this.setData({
+      typeSearchKey: key,
+      filteredTypes: filtered,
+      hasExactMatch,
+    })
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
+  onSelectProject(e) {
+    const item = e.currentTarget.dataset.item
+    this.setData({
+      projectId: item._id,
+      projectName: item.name,
+      showProjectModal: false,
+    })
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
+  onSelectType(e) {
+    const item = e.currentTarget.dataset.item
+    this.setData({
+      expenseTypeId: item._id,
+      expenseTypeName: item.name,
+      showTypeModal: false,
+    })
+  },
 
-  }
+  async createNewType() {
+    const newName = this.data.typeSearchKey.trim()
+    if (!newName) {
+      return wx.showToast({ title: '请输入费用类型名称', icon: 'none' })
+    }
+
+    wx.showLoading({ title: '创建中' })
+    try {
+      const res = await db.collection('expenses-type').add({
+        data: {
+          name: newName,
+          createdAt: db.serverDate(),
+        },
+      })
+      const newType = {
+        _id: res._id,
+        name: newName,
+      }
+      this.setData({
+        expensesTypes: [...this.data.expensesTypes, newType],
+        expenseTypeId: newType._id,
+        expenseTypeName: newType.name,
+        showTypeModal: false,
+      })
+      wx.showToast({ title: '创建成功', icon: 'success' })
+    } catch (e) {
+      console.error('createNewType', e)
+      wx.showToast({ title: '创建失败', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+    }
+  },
+
+  onAmountInput(e) {
+    this.setData({ amount: e.detail.value })
+  },
+
+  onPaidStatusChange(e) {
+    this.setData({ paid: e.detail.value })
+  },
+
+  async onImageAdd(e) {
+    const newFiles = e.detail.current || []
+    if (!newFiles.length) return
+
+    wx.showLoading({ title: '上传中' })
+    const uploadIds = []
+    try {
+      for (const filePath of newFiles) {
+        const suffix = filePath.match(/\.\w+$/)?.[0] || '.jpg'
+        const cloudPath = `expenses/${Date.now()}-${Math.random().toString(36).slice(2, 8)}${suffix}`
+        const uploadRes = await wx.cloud.uploadFile({
+          cloudPath,
+          filePath,
+        })
+        uploadIds.push(uploadRes.fileID)
+      }
+      this.setData({
+        imageUrls: newFiles,
+        imageFileIDs: uploadIds,
+      })
+    } catch (e) {
+      console.error('onImageAdd', e)
+      wx.showToast({ title: '图片上传失败', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+    }
+  },
+
+  onImageRemove(e) {
+    const removeIndex = e.detail.index
+    const imageUrls = this.data.imageUrls.filter((_, index) => index !== removeIndex)
+    const imageFileIDs = this.data.imageFileIDs.filter((_, index) => index !== removeIndex)
+    this.setData({ imageUrls, imageFileIDs })
+  },
+
+  async onSubmit() {
+    const {
+      projectId,
+      projectName,
+      expenseTypeId,
+      expenseTypeName,
+      amount,
+      paid,
+      paymentMethod,
+      paymentDate,
+      imageFileIDs,
+    } = this.data
+
+    if (!projectId) {
+      return wx.showToast({ title: '请选择关联项目', icon: 'none' })
+    }
+    if (!expenseTypeId) {
+      return wx.showToast({ title: '请选择费用类型', icon: 'none' })
+    }
+    const parsedAmount = parseFloat(amount)
+    if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
+      return wx.showToast({ title: '请输入有效金额', icon: 'none' })
+    }
+
+    wx.showLoading({ title: '保存中' })
+    try {
+      await db.collection('expenses').add({
+        data: {
+          projectId,
+          projectName,
+          expenseTypeId,
+          expenseTypeName,
+          amount: parsedAmount,
+          paid,
+          paymentMethod,
+          paymentDate,
+          imageFileIDs,
+          createdAt: db.serverDate(),
+          updatedAt: db.serverDate(),
+        },
+      })
+      wx.showToast({ title: '保存成功', icon: 'success' })
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 1200)
+    } catch (e) {
+      console.error('onSubmit', e)
+      wx.showToast({ title: '保存失败', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+    }
+  },
 })

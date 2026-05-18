@@ -1,18 +1,18 @@
 <view class="page-container">
   <!-- Card 1: Form -->
   <view class="form-card">
-    <l-list title="💼 关联项目" right-desc="请选择关联项目" is-link="{{true}}" l-class="l-list-no-border"></l-list>
-    <l-list title="🏷️ 费用类型" right-desc="请选择费用类型" is-link="{{true}}" l-class="l-list-no-border"></l-list>
+    <l-list title="💼 关联项目" right-desc="{{projectName || '请选择关联项目'}}" is-link="{{true}}" l-class="l-list-no-border" bindtap="showProjectPicker"></l-list>
+    <l-list title="🏷️ 费用类型" right-desc="{{expenseTypeName || '请选择费用类型'}}" is-link="{{true}}" l-class="l-list-no-border" bindtap="showTypePicker"></l-list>
     <l-list title="💰 金额" is-link="{{false}}" l-class="l-list-no-border">
       <view slot="right-section" class="item-right">
         <text class="amount-symbol">¥</text>
-        <input class="amount-input" type="digit" placeholder="0.00" placeholder-class="amount-placeholder"></input>
+        <input class="amount-input" type="digit" placeholder="0.00" placeholder-class="amount-placeholder" value="{{amount}}" bindinput="onAmountInput" />
       </view>
     </l-list>
     <l-list title="💳 支付状态" is-link="{{false}}" l-class="l-list-no-border">
       <view slot="right-section" class="item-right">
-        <text class="status-text">未支付</text>
-        <switch color="#E88B9E" style="transform:scale(0.8); margin-right:-10px;"></switch>
+        <text class="status-text">{{paid ? '已支付' : '未支付'}}</text>
+        <switch color="#E88B9E" style="transform:scale(0.8); margin-right:-10px;" checked="{{paid}}" bindchange="onPaidStatusChange"></switch>
       </view>
     </l-list>
   </view>
@@ -46,7 +46,7 @@
   </view>
   <!-- Card 3: Photo / Voucher -->
   <view class="photo-card">
-    <l-image-picker size="5" bind:linchange="onChangeTap">
+    <l-image-picker count="1" urls="{{imageUrls}}" bind:linadd="onImageAdd" bind:linremove="onImageRemove">
       <text class="photo-title">凭证 / 照片</text>
       <view class="upload-area">
         <view class="upload-icon-wrap">
@@ -59,6 +59,46 @@
   </view>
   <!-- Footer -->
   <view class="footer">
-    <l-button bg-color="#E88B9E" shape="circle" l-class="submit-btn-l" size="long">保存</l-button>
+    <l-button bg-color="#E88B9E" shape="circle" l-class="submit-btn-l" size="long" bindtap="onSubmit">保存</l-button>
+  </view>
+
+  <!-- Project Picker Modal -->
+  <view class="type-picker-mask" wx:if="{{showProjectModal}}" bindtap="hideProjectPicker"></view>
+  <view class="type-picker-modal" wx:if="{{showProjectModal}}">
+    <view class="type-picker-header">
+      <text class="type-picker-title">选择关联项目</text>
+      <view class="type-picker-close" bindtap="hideProjectPicker">✕</view>
+    </view>
+    <view class="type-search-bar">
+      <input class="type-search-input" placeholder="搜索项目" value="{{projectSearchKey}}" bindinput="onSearchProjectInput" />
+    </view>
+    <scroll-view class="type-list" scroll-y="true">
+      <view class="type-item" wx:for="{{filteredProjects}}" wx:key="_id" bindtap="onSelectProject" data-item="{{item}}">
+        <text>{{item.name}}</text>
+      </view>
+      <view class="type-empty" wx:if="{{filteredProjects.length === 0}}">暂无可选项目，请先创建项目</view>
+    </scroll-view>
+  </view>
+
+  <!-- Expense Type Picker Modal -->
+  <view class="type-picker-mask" wx:if="{{showTypeModal}}" bindtap="hideTypePicker"></view>
+  <view class="type-picker-modal" wx:if="{{showTypeModal}}">
+    <view class="type-picker-header">
+      <text class="type-picker-title">选择费用类型</text>
+      <view class="type-picker-close" bindtap="hideTypePicker">✕</view>
+    </view>
+    <view class="type-search-bar">
+      <input class="type-search-input" placeholder="搜索或输入新费用类型" value="{{typeSearchKey}}" bindinput="onSearchTypeInput" />
+      <view class="type-add-btn" wx:if="{{typeSearchKey && !hasExactMatch}}" bindtap="createNewType">
+        创建 "{{typeSearchKey}}"
+      </view>
+    </view>
+    <scroll-view class="type-list" scroll-y="true">
+      <view class="type-item {{item._id === expenseTypeId ? 'active' : ''}}" wx:for="{{filteredTypes}}" wx:key="_id" bindtap="onSelectType" data-item="{{item}}">
+        <text>{{item.name}}</text>
+        <text class="check-icon" wx:if="{{item._id === expenseTypeId}}">✓</text>
+      </view>
+      <view class="type-empty" wx:if="{{filteredTypes.length === 0}}">无匹配结果，点击上方按钮创建</view>
+    </scroll-view>
   </view>
 </view>

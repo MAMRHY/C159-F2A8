@@ -11,123 +11,46 @@
   <view class="summary-card">
     <view class="summary-item">
       <text class="summary-label">总支出</text>
-      <text class="summary-value dark">¥128,000.00</text>
+      <text class="summary-value dark">¥{{totalAmount}}</text>
     </view>
     <view class="summary-divider"></view>
     <view class="summary-item">
       <text class="summary-label">已付</text>
-      <text class="summary-value dark">¥78,000.00</text>
+      <text class="summary-value dark">¥{{paidAmount}}</text>
     </view>
     <view class="summary-divider"></view>
     <view class="summary-item">
       <text class="summary-label">未付</text>
-      <text class="summary-value pink">¥50,000.00</text>
+      <text class="summary-value pink">¥{{unpaidAmount}}</text>
     </view>
   </view>
   <!-- List Content -->
   <view class="list-container">
-    <!-- Category Card 1 -->
     <view class="category-card">
       <view class="category-header">
         <view class="category-left">
           <view class="icon-wrap pink">
-            <text>📷</text>
+            <text>📋</text>
           </view>
-          <text class="category-title">婚纱摄影</text>
+          <text class="category-title">费用明细</text>
         </view>
         <view class="category-right">
-          <text class="category-count">共 1 项</text>
-          <text class="category-total">¥5,000.00</text>
-          <text class="arrow-up">v</text>
+          <text class="category-count">共 {{records.length}} 项</text>
+          <text class="category-total">¥{{totalAmount}}</text>
         </view>
       </view>
       <view class="item-list">
-        <view class="record-item">
+        <view class="record-item border-bottom" wx:for="{{records}}" wx:key="_id">
           <view class="item-info">
-            <view class="item-name">婚纱摄影定金</view>
-            <view class="item-desc">2小时前 · 负责人: 晓敏</view>
+            <view class="item-name">{{item.projectName || '未知项目'}}</view>
+            <view class="item-desc">{{item.expenseTypeName || '未知类型'}} · {{item.paymentDate || item.createdAtStr}}</view>
           </view>
           <view class="item-amount-wrap">
-            <text class="item-amount">¥5,000.00</text>
-            <text class="status-tag paid">已付</text>
+            <text class="item-amount">¥{{item.amount}}</text>
+            <text class="status-tag {{item.paid ? 'paid' : 'unpaid'}}">{{item.paid ? '已付' : '未付'}}</text>
           </view>
         </view>
-      </view>
-    </view>
-    <!-- Category Card 2 -->
-    <view class="category-card">
-      <view class="category-header">
-        <view class="category-left">
-          <view class="icon-wrap pink">
-            <text>🏨</text>
-          </view>
-          <text class="category-title">婚宴酒店</text>
-        </view>
-        <view class="category-right">
-          <text class="category-count">共 2 项</text>
-          <text class="category-total">¥68,000.00</text>
-          <text class="arrow-up">v</text>
-        </view>
-      </view>
-      <view class="item-list">
-        <view class="record-item border-bottom">
-          <view class="item-info">
-            <view class="item-name">婚宴酒店预订金</view>
-            <view class="item-desc">昨天 · 负责人: 志强</view>
-          </view>
-          <view class="item-amount-wrap">
-            <text class="item-amount">¥20,000.00</text>
-            <text class="status-tag paid">已付</text>
-          </view>
-        </view>
-        <view class="record-item">
-          <view class="item-info">
-            <view class="item-name">婚宴酒店尾款</view>
-            <view class="item-desc">2025-11-30 · 负责人: 志强</view>
-          </view>
-          <view class="item-amount-wrap">
-            <text class="item-amount">¥48,000.00</text>
-            <text class="status-tag unpaid">未付</text>
-          </view>
-        </view>
-      </view>
-    </view>
-    <!-- Category Card 3 -->
-    <view class="category-card">
-      <view class="category-header">
-        <view class="category-left">
-          <view class="icon-wrap pink">
-            <text>❤️</text>
-          </view>
-          <text class="category-title">婚礼策划</text>
-        </view>
-        <view class="category-right">
-          <text class="category-count">共 2 项</text>
-          <text class="category-total">¥18,000.00</text>
-          <text class="arrow-up">v</text>
-        </view>
-      </view>
-      <view class="item-list">
-        <view class="record-item border-bottom">
-          <view class="item-info">
-            <view class="item-name">婚礼策划服务费</view>
-            <view class="item-desc">3天前 · 负责人: 晓敏</view>
-          </view>
-          <view class="item-amount-wrap">
-            <text class="item-amount">¥10,000.00</text>
-            <text class="status-tag paid">已付</text>
-          </view>
-        </view>
-        <view class="record-item">
-          <view class="item-info">
-            <view class="item-name">婚礼现场布置</view>
-            <view class="item-desc">2025-11-15 · 负责人: 晓敏</view>
-          </view>
-          <view class="item-amount-wrap">
-            <text class="item-amount">¥8,000.00</text>
-            <text class="status-tag unpaid">未付</text>
-          </view>
-        </view>
+        <view class="type-empty" wx:if="{{records.length === 0}}">暂无费用记录，点击下方按钮新增</view>
       </view>
     </view>
   </view>
