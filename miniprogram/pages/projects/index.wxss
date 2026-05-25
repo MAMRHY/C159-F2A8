@@ -127,6 +127,7 @@
 
 .amount-value {
   font-size: 32rpx;
+  line-height: 32rpx;
   font-weight: bold;
   color: #333;
 }
@@ -154,5 +155,42 @@
 
 .item-arrow {
   font-size: 28rpx;
+  color: #CCC;
+}
+
+/* 无需付款状态 */
+.status-none {
+  background: #F0F4FF;
+  color: #8BA0CC;
+}
+
+/* 总金额待定样式 */
+.amount-value.pending {
+  color: #BBBBBB;
+  font-size: 26rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.empty-sub {
+  font-size: 24rpx;
   color: #CCC;
 }

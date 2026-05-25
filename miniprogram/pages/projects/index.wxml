@@ -9,79 +9,43 @@
       </view>
     </view>
   </view>
-
   <!-- Tabs -->
   <scroll-view class="tabs-scroll" scroll-x="true" show-scrollbar="false">
     <view class="tabs">
-      <view class="tab active">全部</view>
-      <view class="tab">全部付清</view>
-      <view class="tab">部分付清</view>
-      <view class="tab">未开始付款</view>
+      <view class="tab {{activeTab === 0 ? 'active' : ''}}" bindtap="onTabChange" data-tab="0">
+        全部
+      </view>
+      <view class="tab {{activeTab === 1 ? 'active' : ''}}" bindtap="onTabChange" data-tab="1">
+        全部付清
+      </view>
+      <view class="tab {{activeTab === 2 ? 'active' : ''}}" bindtap="onTabChange" data-tab="2">
+        部分付清
+      </view>
+      <view class="tab {{activeTab === 3 ? 'active' : ''}}" bindtap="onTabChange" data-tab="3">
+        未开始付款
+      </view>
     </view>
   </scroll-view>
-
   <!-- Project List -->
   <view class="project-list">
-    <!-- Item 1 -->
-    <view class="project-card" bindtap="goToEditProject" data-id="1">
-      <view class="project-info">
-        <text class="project-name">酒席-天鹅酒店</text>
-        <text class="project-leader">负责人：张晓玥</text>
-      </view>
-      <view class="project-amount-status">
-        <view class="amount-wrap">
-          <text class="amount-label">总金额</text>
-          <text class="amount-value">¥88,888.00</text>
-        </view>
-        <view class="status-pill status-paid">全部付清</view>
-      </view>
-      <text class="item-arrow">></text>
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{projects.length === 0}}">
+      <text class="empty-icon">📂</text>
+      <text class="empty-text">暂无项目</text>
+      <text class="empty-sub">快去添加吧</text>
     </view>
-    
-    <!-- Item 2 -->
-    <view class="project-card">
+    <!-- 动态项目列表 -->
+    <view class="project-card" wx:for="{{projects}}" wx:key="_id" bindtap="goToEditProject" data-id="{{item._id}}">
       <view class="project-info">
-        <text class="project-name">婚纱摄影-定金</text>
-        <text class="project-leader">负责人：晓敏</text>
+        <text class="project-name">{{item.name}}</text>
+        <text class="project-leader">负责人：{{item.leader}}</text>
       </view>
       <view class="project-amount-status">
         <view class="amount-wrap">
           <text class="amount-label">总金额</text>
-          <text class="amount-value">¥5,000.00</text>
+          <text class="amount-value {{item.totalAmount === '待定' ? 'pending' : ''}}">{{item.totalAmount === '待定' ? '待定' : '¥' + item.totalAmount}}</text>
         </view>
-        <view class="status-pill status-partial">部分付清</view>
-      </view>
-      <text class="item-arrow">></text>
-    </view>
-
-    <!-- Item 3 -->
-    <view class="project-card">
-      <view class="project-info">
-        <text class="project-name">婚礼策划</text>
-        <text class="project-leader">负责人：李想</text>
-      </view>
-      <view class="project-amount-status">
-        <view class="amount-wrap">
-          <text class="amount-label">总金额</text>
-          <text class="amount-value">¥20,000.00</text>
-        </view>
-        <view class="status-pill status-partial">部分付清</view>
-      </view>
-      <text class="item-arrow">></text>
-    </view>
-
-    <!-- Item 4 -->
-    <view class="project-card">
-      <view class="project-info">
-        <text class="project-name">婚车租赁</text>
-        <text class="project-leader">负责人：志强</text>
-      </view>
-      <view class="project-amount-status">
-        <view class="amount-wrap">
-          <text class="amount-label">总金额</text>
-          <text class="amount-value">¥6,000.00</text>
-        </view>
-        <view class="status-pill status-unpaid">未开始付款</view>
+        <view class="status-pill {{item.statusClass}}">{{item.statusText}}</view>
       </view>
       <text class="item-arrow">></text>
     </view>
