@@ -3,6 +3,8 @@ const db = wx.cloud.database()
 
 Page({
   data: {
+    editId: '', // 编辑模式时的记录 _id，为空则为新增模式
+    pageTitle: '新增费用',
     showMore: false,
     paymentMethod: '',
     paymentDate: '',
@@ -26,9 +28,45 @@ Page({
     hasExactMatch: false,
   },
 
-  onLoad() {
+  onLoad(options) {
+    const { id } = options
+    if (id) {
+      this.setData({ editId: id, pageTitle: '编辑费用' })
+      wx.setNavigationBarTitle({ title: '编辑费用' })
+    } else {
+      wx.setNavigationBarTitle({ title: '新增费用' })
+    }
     this.fetchProjects()
     this.fetchExpenseTypes()
+    if (id) {
+      this.fetchRecord(id)
+    }
+  },
+
+  async fetchRecord(id) {
+    wx.showLoading({ title: '加载中' })
+    try {
+      const res = await db.collection('expenses').doc(id).get()
+      const record = res.data
+      this.setData({
+        projectId: record.projectId || '',
+        projectName: record.projectName || '',
+        expenseTypeId: record.expenseTypeId || '',
+        expenseTypeName: record.expenseTypeName || '',
+        amount: record.amount != null ? String(record.amount) : '',
+        paid: !!record.paid,
+        paymentMethod: record.paymentMethod || '',
+        paymentDate: record.paymentDate || '',
+        imageUrls: record.imageFileIDs || [],
+        imageFileIDs: record.imageFileIDs || [],
+        showMore: !!(record.paymentMethod || record.paymentDate),
+      })
+    } catch (e) {
+      console.error('fetchRecord', e)
+      wx.showToast({ title: '加载记录失败', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+    }
   },
 
   async fetchProjects() {
@@ -209,6 +247,7 @@ Page({
 
   async onSubmit() {
     const {
+      editId,
       projectId,
       projectName,
       expenseTypeId,
@@ -233,28 +272,48 @@ Page({
 
     wx.showLoading({ title: '保存中' })
     try {
-      await db.collection('expenses').add({
-        data: {
-          projectId,
-          projectName,
-          expenseTypeId,
-          expenseTypeName,
-          amount: parsedAmount,
-          paid,
-          paymentMethod,
-          paymentDate,
-          imageFileIDs,
-          createdAt: db.serverDate(),
-          updatedAt: db.serverDate(),
-        },
-      })
-      wx.showToast({ title: '保存成功', icon: 'success' })
+      if (editId) {
+        // 编辑模式：更新现有记录
+        await db.collection('expenses').doc(editId).update({
+          data: {
+            projectId,
+            projectName,
+            expenseTypeId,
+            expenseTypeName,
+            amount: parsedAmount,
+            paid,
+            paymentMethod,
+            paymentDate,
+            imageFileIDs,
+            updatedAt: db.serverDate(),
+          },
+        })
+        wx.showToast({ title: '修改成功', icon: 'success' })
+      } else {
+        // 新增模式
+        await db.collection('expenses').add({
+          data: {
+            projectId,
+            projectName,
+            expenseTypeId,
+            expenseTypeName,
+            amount: parsedAmount,
+            paid,
+            paymentMethod,
+            paymentDate,
+            imageFileIDs,
+            createdAt: db.serverDate(),
+            updatedAt: db.serverDate(),
+          },
+        })
+        wx.showToast({ title: '保存成功', icon: 'success' })
+      }
       setTimeout(() => {
         wx.navigateBack()
       }, 1200)
     } catch (e) {
       console.error('onSubmit', e)
-      wx.showToast({ title: '保存失败', icon: 'none' })
+      wx.showToast({ title: editId ? '修改失败' : '保存失败', icon: 'none' })
     } finally {
       wx.hideLoading()
     }

@@ -55,5 +55,12 @@ Page({
     wx.navigateTo({
       url: '/pages/record-add/index'
     })
+  },
+
+  onEditRecord(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `/pages/record-add/index?id=${id}`
+    })
   }
 })

@@ -40,7 +40,7 @@
         </view>
       </view>
       <view class="item-list">
-        <view class="record-item border-bottom" wx:for="{{records}}" wx:key="_id">
+        <view class="record-item border-bottom" wx:for="{{records}}" wx:key="_id" bindtap="onEditRecord" data-id="{{item._id}}">
           <view class="item-info">
             <view class="item-name">{{item.projectName || '未知项目'}}</view>
             <view class="item-desc">{{item.expenseTypeName || '未知类型'}} · {{item.paymentDate || item.createdAtStr}}</view>
