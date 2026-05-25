@@ -43,11 +43,13 @@
       <view class="project-amount-status">
         <view class="amount-wrap">
           <text class="amount-label">总金额</text>
-          <text class="amount-value {{item.totalAmount === '待定' ? 'pending' : ''}}">{{item.totalAmount === '待定' ? '待定' : '¥' + item.totalAmount}}</text>
+          <view class="amount-value {{item.totalAmount === '待定' ? 'pending' : ''}}">
+            {{item.totalAmount === '待定' ? '待定' : '¥' + item.totalAmount}}
+          </view>
         </view>
         <view class="status-pill {{item.statusClass}}">{{item.statusText}}</view>
       </view>
-      <text class="item-arrow">></text>
+      <l-icon name="right" size="20" color="#666"></l-icon>
     </view>
   </view>
 </view>

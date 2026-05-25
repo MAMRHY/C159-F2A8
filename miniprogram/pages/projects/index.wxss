@@ -127,7 +127,6 @@
 
 .amount-value {
   font-size: 32rpx;
-  line-height: 32rpx;
   font-weight: bold;
   color: #333;
 }
