@@ -2,7 +2,9 @@ const db = wx.cloud.database()
 
 Page({
   data: {
-    records: [],
+    activeTab: 0,      // 0=全部 1=已付 2=未付
+    allRecords: [],    // 全量数据
+    records: [],       // 当前 tab 显示的过滤后数据
     totalAmount: '0.00',
     paidAmount: '0.00',
     unpaidAmount: '0.00',
@@ -16,7 +18,7 @@ Page({
     wx.showLoading({ title: '加载中' })
     try {
       const res = await db.collection('expenses').orderBy('createdAt', 'desc').limit(100).get()
-      const records = res.data.map(item => {
+      const allRecords = res.data.map(item => {
         const createdAtStr = item.createdAt ? this.formatDate(item.createdAt) : ''
         return {
           ...item,
@@ -24,23 +26,48 @@ Page({
           createdAtStr,
         }
       })
-
-      const total = records.reduce((sum, item) => sum + Number(item.amount || 0), 0)
-      const paid = records.reduce((sum, item) => sum + (item.paid ? Number(item.amount || 0) : 0), 0)
-      const unpaid = total - paid
-
-      this.setData({
-        records,
-        totalAmount: total.toFixed(2),
-        paidAmount: paid.toFixed(2),
-        unpaidAmount: unpaid.toFixed(2),
-      })
+      this.setData({ allRecords })
+      this.filterRecords()
     } catch (e) {
       console.error('fetchRecords', e)
       wx.showToast({ title: '获取记录失败', icon: 'none' })
     } finally {
       wx.hideLoading()
     }
+  },
+
+  // 根据当前 activeTab 过滤并重算汇总
+  filterRecords() {
+    const { activeTab, allRecords } = this.data
+
+    let records
+    if (activeTab === 0) {
+      records = allRecords
+    } else if (activeTab === 1) {
+      records = allRecords.filter(item => item.paid)
+    } else {
+      records = allRecords.filter(item => !item.paid)
+    }
+
+    // 汇总数据始终基于全量计算
+    const total = allRecords.reduce((sum, item) => sum + Number(item.amount || 0), 0)
+    const paid = allRecords.reduce((sum, item) => sum + (item.paid ? Number(item.amount || 0) : 0), 0)
+    const unpaid = total - paid
+
+    this.setData({
+      records,
+      totalAmount: total.toFixed(2),
+      paidAmount: paid.toFixed(2),
+      unpaidAmount: unpaid.toFixed(2),
+    })
+  },
+
+  // 切换 tab
+  onTabChange(e) {
+    const tab = Number(e.currentTarget.dataset.tab)
+    if (tab === this.data.activeTab) return
+    this.setData({ activeTab: tab })
+    this.filterRecords()
   },
 
   formatDate(date) {

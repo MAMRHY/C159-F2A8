@@ -3,9 +3,9 @@
   <view class="header-title">费用账本</view>
   <!-- Top Tabs -->
   <view class="tab-container">
-    <view class="tab-item active">全部</view>
-    <view class="tab-item">已付</view>
-    <view class="tab-item">未付</view>
+    <view class="tab-item {{activeTab === 0 ? 'active' : ''}}" bindtap="onTabChange" data-tab="0">全部</view>
+    <view class="tab-item {{activeTab === 1 ? 'active' : ''}}" bindtap="onTabChange" data-tab="1">已付</view>
+    <view class="tab-item {{activeTab === 2 ? 'active' : ''}}" bindtap="onTabChange" data-tab="2">未付</view>
   </view>
   <!-- Summary Card -->
   <view class="summary-card">
