@@ -1,31 +1,33 @@
 <view class="page-container">
-  <!-- Custom Navigation Header -->
-  <view class="custom-header" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
-    <view class="header-content" style="margin-right: {{windowWidth - capsuleLeft + 10}}px;">
-      <text class="header-title">项目管理</text>
-      <view class="add-btn" bindtap="goToAddProject">
-        <text class="add-icon">＋</text>
-        <text>新增项目</text>
+  <view class="header-wrap">
+    <!-- Custom Navigation Header -->
+    <view class="custom-header" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
+      <view class="header-content" style="margin-right: {{windowWidth - capsuleLeft + 10}}px;">
+        <text class="header-title">项目管理</text>
+        <view class="add-btn" bindtap="goToAddProject">
+          <text class="add-icon">＋</text>
+          <text>新增项目</text>
+        </view>
       </view>
     </view>
+    <!-- Tabs -->
+    <scroll-view class="tabs-scroll" scroll-x="true" show-scrollbar="false">
+      <view class="tabs">
+        <view class="tab {{activeTab === 0 ? 'active' : ''}}" bindtap="onTabChange" data-tab="0">
+          全部
+        </view>
+        <view class="tab {{activeTab === 1 ? 'active' : ''}}" bindtap="onTabChange" data-tab="1">
+          全部付清
+        </view>
+        <view class="tab {{activeTab === 2 ? 'active' : ''}}" bindtap="onTabChange" data-tab="2">
+          部分付清
+        </view>
+        <view class="tab {{activeTab === 3 ? 'active' : ''}}" bindtap="onTabChange" data-tab="3">
+          未开始付款
+        </view>
+      </view>
+    </scroll-view>
   </view>
-  <!-- Tabs -->
-  <scroll-view class="tabs-scroll" scroll-x="true" show-scrollbar="false">
-    <view class="tabs">
-      <view class="tab {{activeTab === 0 ? 'active' : ''}}" bindtap="onTabChange" data-tab="0">
-        全部
-      </view>
-      <view class="tab {{activeTab === 1 ? 'active' : ''}}" bindtap="onTabChange" data-tab="1">
-        全部付清
-      </view>
-      <view class="tab {{activeTab === 2 ? 'active' : ''}}" bindtap="onTabChange" data-tab="2">
-        部分付清
-      </view>
-      <view class="tab {{activeTab === 3 ? 'active' : ''}}" bindtap="onTabChange" data-tab="3">
-        未开始付款
-      </view>
-    </view>
-  </scroll-view>
   <!-- Project List -->
   <view class="project-list">
     <!-- 空状态 -->

@@ -1,6 +1,14 @@
 .page-container {
   padding: 0;
-  padding-bottom: 40rpx;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.project-list {
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* Header */
