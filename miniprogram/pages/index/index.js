@@ -212,6 +212,12 @@ Page({
     })
   },
 
+  goToAllExpenses() {
+    wx.switchTab({
+      url: '/pages/record/index',
+    })
+  },
+
   goToAddProject() {
     wx.navigateTo({
       url: '/pages/project-add/index',

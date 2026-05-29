@@ -127,7 +127,7 @@
       </view>
       <!-- Recent Expenses -->
       <view class="recent-section">
-        <view class="section-header">
+        <view class="section-header" bindtap="goToAllExpenses">
           <text class="section-title">最近支出</text>
           <text class="section-more">查看全部</text>
         </view>
