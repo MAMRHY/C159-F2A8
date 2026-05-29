@@ -125,8 +125,8 @@
           <text>新增项目</text>
         </view>
       </view>
-      <!-- Recent Expenses -->
-      <view class="recent-section">
+      <!-- Recent Expenses todo 暂不开放 -->
+      <view class="recent-section" wx:if="{{false}}">
         <view class="section-header" bindtap="goToAllExpenses">
           <text class="section-title">最近支出</text>
           <text class="section-more">查看全部</text>
