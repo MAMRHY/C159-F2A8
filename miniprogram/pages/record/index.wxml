@@ -43,7 +43,7 @@
           </view>
           <view class="category-right">
             <text class="category-count">共 {{group.count}} 项</text>
-            <text class="category-total">¥{{group.totalAmount}}</text>
+            <text class="category-total">{{group.totalAmount === '待定' ? '待定' : '¥' + group.totalAmount}}</text>
           </view>
         </view>
         <view class="item-list">

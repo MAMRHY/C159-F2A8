@@ -85,6 +85,7 @@ Page({
           projectName: projName,
           records: [],
           totalAmount: 0,
+          hasPendingAmount: false,
           count: 0
         }
       }
@@ -92,13 +93,15 @@ Page({
       groupedMap[projName].count++
       if (item.amount >= 0 && item.amount !== null) {
         groupedMap[projName].totalAmount += item.amount
+      } else {
+        groupedMap[projName].hasPendingAmount = true
       }
     })
 
     const groupedRecords = Object.values(groupedMap).map(group => {
       return {
         ...group,
-        totalAmount: group.totalAmount.toFixed(2)
+        totalAmount: group.hasPendingAmount ? '待定' : group.totalAmount.toFixed(2)
       }
     })
 
