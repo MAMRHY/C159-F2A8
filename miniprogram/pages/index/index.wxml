@@ -50,11 +50,14 @@
             </span>
           </view>
           <text class="card-title">预算进度</text>
+          <view bindtap="handleHelpTap" style="padding: 10rpx; display: flex; align-items: center;">
+            <l-icon name='help' size="30" color="#999" />
+          </view>
         </view>
         <view class="budget-content-new">
           <view class="progress-bar-wrap">
             <!-- 上方悬浮标签：已付 -->
-            <view class="bubble bubble-top" style="left: {{paidPercent}}%;">
+            <view class="bubble bubble-top {{showLabels ? 'show' : ''}}" style="left: {{paidPercent}}%;">
               <text>已付 {{paidPercent}}%</text>
               <view class="bubble-arrow-down"></view>
             </view>
@@ -63,7 +66,7 @@
               <view class="progress-bar-fill-paid" style="width: {{paidPercent}}%;"></view>
             </view>
             <!-- 下方悬浮标签：已支 -->
-            <view class="bubble bubble-bottom" style="left: {{spentPercent}}%;">
+            <view class="bubble bubble-bottom {{showLabels ? 'show' : ''}}" style="left: {{spentPercent}}%;">
               <view class="bubble-arrow-up"></view>
               <text>已支 {{spentPercent}}%</text>
             </view>
@@ -76,8 +79,15 @@
         <view class="divider"></view>
         <view class="budget-footer">
           <view style="display: flex; justify-content: space-between; width: 100%; font-size: 24rpx; color: #666;">
-            <text>已支 <text style="color: #bfd7fb;">¥{{formattedTotalSpent}}</text> / ¥{{formattedTotalBudget}}</text>
-            <text>已付 <text class="highlight">¥{{formattedTotalPaid}}</text></text>
+            <span>
+              已支
+              <text style="color: #bfd7fb;">¥{{formattedTotalSpent}}</text>
+              / ¥{{formattedTotalBudget}}
+            </span>
+            <span>
+              已付
+              <text class="highlight">¥{{formattedTotalPaid}}</text>
+            </span>
           </view>
         </view>
       </view>

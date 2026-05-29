@@ -165,6 +165,7 @@
   font-size: 28rpx;
   color: #666;
   font-weight: 500;
+  padding-right: 20rpx;
 }
 
 /* Budget Card */
@@ -190,6 +191,12 @@
   white-space: nowrap;
   z-index: 10;
   font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.bubble.show {
+  opacity: 1;
 }
 
 .bubble-top {
@@ -243,6 +250,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  transition: width 0.8s ease-out;
 }
 
 .progress-bar-fill-paid {
@@ -252,6 +260,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  transition: width 0.8s ease-out;
 }
 
 .progress-labels {

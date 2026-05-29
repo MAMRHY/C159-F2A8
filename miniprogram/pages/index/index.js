@@ -14,7 +14,8 @@ Page({
     paidPercent: 0,
     formattedTotalBudget: '0',
     formattedTotalSpent: '0',
-    formattedTotalPaid: '0'
+    formattedTotalPaid: '0',
+    showLabels: false
   },
 
   onPageScroll(e) {
@@ -74,14 +75,14 @@ Page({
   async fetchBudgetData() {
     try {
       const db = wx.cloud.database();
-      
+
       let openid = app.globalData.openid;
       if (!openid) {
-          const res = await wx.cloud.callFunction({ name: 'quickstartFunctions', data: { type: 'getOpenId' }});
-          openid = res.result.openid;
-          app.globalData.openid = openid;
+        const res = await wx.cloud.callFunction({ name: 'quickstartFunctions', data: { type: 'getOpenId' } });
+        openid = res.result.openid;
+        app.globalData.openid = openid;
       }
-      
+
       // 获取总预算
       const weddingRes = await db.collection('wedding_info').where({ _openid: openid }).get();
       let totalBudget = 0;
@@ -99,10 +100,10 @@ Page({
         const promise = db.collection('expenses').skip(i * MAX_LIMIT).limit(MAX_LIMIT).get();
         tasks.push(promise);
       }
-      
+
       let totalSpent = 0;
       let totalPaid = 0;
-      
+
       if (tasks.length > 0) {
         const results = await Promise.all(tasks);
         results.forEach(res => {
@@ -118,10 +119,10 @@ Page({
 
       let spentPercent = totalBudget > 0 ? Math.min(Math.round((totalSpent / totalBudget) * 100), 100) : 0;
       let paidPercent = totalBudget > 0 ? Math.min(Math.round((totalPaid / totalBudget) * 100), 100) : 0;
-      
+
       if (totalBudget === 0 && totalSpent > 0) {
-          spentPercent = 100;
-          paidPercent = totalPaid > 0 ? Math.round((totalPaid / totalSpent) * 100) : 0;
+        spentPercent = 100;
+        paidPercent = totalPaid > 0 ? Math.round((totalPaid / totalSpent) * 100) : 0;
       }
 
       this.setData({
@@ -132,12 +133,27 @@ Page({
         paidPercent,
         formattedTotalBudget: this.formatNumber(totalBudget),
         formattedTotalSpent: this.formatNumber(totalSpent),
-        formattedTotalPaid: this.formatNumber(totalPaid)
+        formattedTotalPaid: this.formatNumber(totalPaid),
+        showLabels: false
+      }, () => {
+        setTimeout(() => {
+          this.setData({ showLabels: true });
+        }, 500);
       });
-      
+
     } catch (e) {
       console.error('获取预算失败', e);
     }
+  },
+
+  handleHelpTap() {
+    console.log('handleHelpTap');
+    wx.showModal({
+      title: '预算进度说明',
+      content: '反映当前支出对总预算的消耗。\r\n已支：包括已支付和待支付的款项\r\n已付：实际已经付出去的金额',
+      showCancel: false,
+      confirmText: '我知道了'
+    });
   },
 
   formatNumber(num) {
