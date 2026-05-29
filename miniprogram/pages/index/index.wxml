@@ -98,8 +98,8 @@
             <view class="icon-wrap">
               <text class="icon">📅</text>
             </view>
+            <!-- Todo 完善婚礼当天的样式 -->
             <text class="card-title">倒计时</text>
-            <!-- <text class="card-title">婚礼倒计时</text> -->
           </view>
           <view class="countdown-days">
             <text class="days-num">{{countdownDays}}</text>
