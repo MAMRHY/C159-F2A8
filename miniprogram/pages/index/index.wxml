@@ -45,36 +45,40 @@
       <view class="card budget-card">
         <view class="card-header">
           <view class="icon-wrap">
-            <text class="icon">📊</text>
+            <span class="icon">
+              <image src="../../images/index/qizhi.png" />
+            </span>
           </view>
           <text class="card-title">预算进度</text>
         </view>
-        <view class="budget-content">
-          <view class="budget-left">
-            <view class="budget-percent">
-              <text>45</text>
-              <text class="percent-sign">%</text>
+        <view class="budget-content-new">
+          <view class="progress-bar-wrap">
+            <!-- 上方悬浮标签：已付 -->
+            <view class="bubble bubble-top" style="left: {{paidPercent}}%;">
+              <text>已付 {{paidPercent}}%</text>
+              <view class="bubble-arrow-down"></view>
             </view>
-            <!-- <text class="budget-label">已用预算</text> -->
-          </view>
-          <view class="budget-right">
             <view class="progress-bar-bg">
-              <view class="progress-bar-fill" style="width: 45%;"></view>
+              <view class="progress-bar-fill-spent" style="width: {{spentPercent}}%;"></view>
+              <view class="progress-bar-fill-paid" style="width: {{paidPercent}}%;"></view>
+            </view>
+            <!-- 下方悬浮标签：已支 -->
+            <view class="bubble bubble-bottom" style="left: {{spentPercent}}%;">
+              <view class="bubble-arrow-up"></view>
+              <text>已支 {{spentPercent}}%</text>
             </view>
             <view class="progress-labels">
               <text>0%</text>
-              <text>45%</text>
               <text>100%</text>
             </view>
           </view>
         </view>
         <view class="divider"></view>
         <view class="budget-footer">
-          <text class="footer-text">
-            <text>已支出</text>
-            <text class="highlight">¥45,000</text>
-            <text>/总预算 ¥100,000</text>
-          </text>
+          <view style="display: flex; justify-content: space-between; width: 100%; font-size: 24rpx; color: #666;">
+            <text>已支 <text style="color: #bfd7fb;">¥{{formattedTotalSpent}}</text> / ¥{{formattedTotalBudget}}</text>
+            <text>已付 <text class="highlight">¥{{formattedTotalPaid}}</text></text>
+          </view>
         </view>
       </view>
       <!-- Countdown Card -->
