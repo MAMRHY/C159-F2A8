@@ -35,8 +35,8 @@
       <text class="empty-sub">快去添加吧</text>
     </view>
     <!-- 动态项目列表 -->
-    <view class="project-card" wx:for="{{projects}}" wx:key="_id" bindtap="goToEditProject" data-id="{{item._id}}">
-      <view class="project-info">
+    <view wx:for="{{projects}}" wx:key="_id" class="project-card" bindlongpress="onDeleteProject" data-id="{{item._id}}">
+      <view class="project-info" bindtap="goToEditProject" data-id="{{item._id}}">
         <text class="project-name">{{item.name}}</text>
         <text class="project-leader">负责人：{{item.leader}}</text>
       </view>
@@ -52,4 +52,6 @@
       <l-icon name="right" size="20" color="#666"></l-icon>
     </view>
   </view>
+  <!-- 删除确认弹窗 -->
+  <l-dialog show="{{showDeleteDialog}}" type="confirm" title="确认删除" content="确认删除吗？删除后该项目下的费用都将一并删除。" confirmText="确认" cancelText="取消" confirmColor="#FF4D4F" bind:linconfirm="onConfirmDelete" bind:lincancel="onCancelDelete" />
 </view>

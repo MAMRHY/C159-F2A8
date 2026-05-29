@@ -11,17 +11,23 @@ Page({
     activeTab: 0,       // 0=全部 1=全部付清 2=部分付清 3=未开始付款
     allProjects: [],    // 全量（含计算字段）
     projects: [],       // 当前 tab 展示
+    slideViewWidth: 750,  // l-slide-view 宽度(rpx)
+    showDeleteDialog: false,  // 删除确认弹窗
+    deleteProjectId: '',      // 待删除的项目ID
   },
 
   onLoad() {
     const info = wx.getSystemInfoSync()
     const menuButtonInfo = wx.getMenuButtonBoundingClientRect()
     const navBarHeight = menuButtonInfo.bottom + menuButtonInfo.top - info.statusBarHeight
+    // project-list 内部可用宽度：750 - padding(32*2=64rpx)
+    const slideViewWidth = 750 - 64
     this.setData({
       statusBarHeight: info.statusBarHeight,
       navBarHeight: navBarHeight,
       windowWidth: info.windowWidth,
       capsuleLeft: menuButtonInfo.left,
+      slideViewWidth,
     })
   },
 
@@ -150,6 +156,58 @@ Page({
     const id = e.currentTarget.dataset.id
     wx.navigateTo({
       url: `/pages/project-add/index?id=${id}`,
+    })
+  },
+
+  // 点击删除按钮，弹出确认弹窗
+  onDeleteProject(e) {
+    const id = e.currentTarget.dataset.id
+    this.setData({
+      deleteProjectId: id,
+      showDeleteDialog: true,
+    })
+  },
+
+  // 确认删除项目
+  async onConfirmDelete() {
+    const { deleteProjectId } = this.data
+    if (!deleteProjectId) return
+
+    this.setData({ showDeleteDialog: false })
+    wx.showLoading({ title: '删除中' })
+
+    try {
+      // 1. 先删除该项目下的所有费用
+      // 先查询出关联的费用记录
+      const expenseRes = await db.collection('expenses')
+        .where({ projectId: deleteProjectId })
+        .get()
+
+      // 逐条删除费用记录（小程序端不支持批量删除）
+      const deletePromises = expenseRes.data.map(expense =>
+        db.collection('expenses').doc(expense._id).remove()
+      )
+      await Promise.all(deletePromises)
+
+      // 2. 删除项目本身
+      await db.collection('projects').doc(deleteProjectId).remove()
+
+      wx.showToast({ title: '删除成功', icon: 'success' })
+      this.setData({ deleteProjectId: '' })
+      this.fetchProjects()
+    } catch (err) {
+      console.error('onConfirmDelete', err)
+      wx.showToast({ title: '删除失败', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+    }
+  },
+
+  // 取消删除
+  onCancelDelete() {
+    this.setData({
+      showDeleteDialog: false,
+      deleteProjectId: '',
     })
   },
 })

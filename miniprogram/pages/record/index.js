@@ -4,10 +4,24 @@ Page({
   data: {
     activeTab: 0,      // 0=全部 1=已付 2=未付
     allRecords: [],    // 全量数据
-    records: [],       // 当前 tab 显示的过滤后数据
+    records: [],       // 当前 tab 展示
     totalAmount: '0.00',
     paidAmount: '0.00',
     unpaidAmount: '0.00',
+    slideViewWidth: 750,  // l-slide-view 宽度(rpx)
+    slideWidth: 160, // 删除按钮宽度(rpx)
+    // 删除确认弹窗控制
+    showDeleteDialog: false,
+    deleteRecordId: '',
+    deleteRecordInfo: ''
+  },
+
+  onLoad() {
+    const sysInfo = wx.getSystemInfoSync()
+    // project-list 内部可用宽度：750 - padding(35*2=70rpx)
+    const slideViewWidth = 750 - 200
+    const slideWidth = 260 // 与右侧删除按钮宽度保持一致
+    this.setData({ slideViewWidth, slideWidth })
   },
 
   onShow() {
@@ -89,5 +103,45 @@ Page({
     wx.navigateTo({
       url: `/pages/record-add/index?id=${id}`
     })
-  }
+  },
+
+  // 长按触发删除，弹出确认弹窗
+  onDeleteRecord(e) {
+    const id = e.currentTarget.dataset.id
+    const project = e.currentTarget.dataset.project || ''
+    const type = e.currentTarget.dataset.type || ''
+    const info = `${project} - ${type}`
+    this.setData({
+      deleteRecordId: id,
+      deleteRecordInfo: info,
+      showDeleteDialog: true,
+    })
+  },
+
+  // 确认删除费用记录
+  async onConfirmDeleteRecord() {
+    const { deleteRecordId } = this.data
+    if (!deleteRecordId) return
+    this.setData({ showDeleteDialog: false })
+    wx.showLoading({ title: '删除中' })
+    try {
+      await db.collection('expenses').doc(deleteRecordId).remove()
+      wx.showToast({ title: '删除成功', icon: 'success' })
+      this.fetchRecords()
+    } catch (err) {
+      console.error('onConfirmDeleteRecord', err)
+      wx.showToast({ title: '删除失败', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+    }
+  },
+
+  // 取消删除
+  onCancelDeleteRecord() {
+    this.setData({
+      showDeleteDialog: false,
+      deleteRecordId: '',
+      deleteRecordInfo: ''
+    })
+  },
 })

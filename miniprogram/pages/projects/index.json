@@ -1,6 +1,8 @@
 {
   "navigationStyle": "custom",
   "usingComponents": {
-    "l-icon": "lin-ui/icon/index"
+    "l-icon": "lin-ui/icon/index",
+    "l-slide-view": "lin-ui/slide-view/index",
+    "l-dialog": "lin-ui/dialog/index"
   }
 }

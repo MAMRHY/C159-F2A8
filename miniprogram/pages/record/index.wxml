@@ -3,9 +3,15 @@
   <view class="header-title">费用账本</view>
   <!-- Top Tabs -->
   <view class="tab-container">
-    <view class="tab-item {{activeTab === 0 ? 'active' : ''}}" bindtap="onTabChange" data-tab="0">全部</view>
-    <view class="tab-item {{activeTab === 1 ? 'active' : ''}}" bindtap="onTabChange" data-tab="1">已付</view>
-    <view class="tab-item {{activeTab === 2 ? 'active' : ''}}" bindtap="onTabChange" data-tab="2">未付</view>
+    <view class="tab-item {{activeTab === 0 ? 'active' : ''}}" bindtap="onTabChange" data-tab="0">
+      全部
+    </view>
+    <view class="tab-item {{activeTab === 1 ? 'active' : ''}}" bindtap="onTabChange" data-tab="1">
+      已付
+    </view>
+    <view class="tab-item {{activeTab === 2 ? 'active' : ''}}" bindtap="onTabChange" data-tab="2">
+      未付
+    </view>
   </view>
   <!-- Summary Card -->
   <view class="summary-card">
@@ -40,16 +46,22 @@
         </view>
       </view>
       <view class="item-list">
-        <view class="record-item border-bottom" wx:for="{{records}}" wx:key="_id" bindtap="onEditRecord" data-id="{{item._id}}">
+        <view wx:for="{{records}}" wx:key="_id" class="record-item border-bottom" bindtap="onEditRecord" bindlongpress="onDeleteRecord" data-id="{{item._id}}" data-project="{{item.projectName}}" data-type="{{item.expenseTypeName}}">
           <view class="item-info">
             <view class="item-name">{{item.projectName || '未知项目'}}</view>
-            <view class="item-desc">{{item.expenseTypeName || '未知类型'}} · {{item.paymentDate || item.createdAtStr}}</view>
+            <view class="item-desc">
+              {{item.expenseTypeName || '未知类型'}} · {{item.paymentDate || item.createdAtStr}}
+            </view>
           </view>
           <view class="item-amount-wrap">
             <text class="item-amount">¥{{item.amount}}</text>
-            <text class="status-tag {{item.paid ? 'paid' : 'unpaid'}}">{{item.paid ? '已付' : '未付'}}</text>
+            <span class="status-tag {{item.paid ? 'paid' : 'unpaid'}}">
+              {{item.paid ? '已付' : '未付'}}
+            </span>
           </view>
         </view>
+        <!-- 删除确认弹窗 -->
+        <l-dialog show="{{showDeleteDialog}}" type="confirm" title="确认删除" content="确认删除 {{deleteRecordInfo}} 吗？" confirmText="确认" cancelText="取消" confirmColor="#FF4D4F" bind:linconfirm="onConfirmDeleteRecord" bind:lincancel="onCancelDeleteRecord" />
         <view class="type-empty" wx:if="{{records.length === 0}}">暂无费用记录，点击下方按钮新增</view>
       </view>
     </view>
