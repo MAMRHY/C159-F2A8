@@ -6,7 +6,7 @@
     <l-list title="💰 金额" is-link="{{false}}" l-class="l-list-no-border">
       <view slot="right-section" class="item-right">
         <text class="amount-symbol">¥</text>
-        <input class="amount-input" type="digit" placeholder="0.00" placeholder-class="amount-placeholder" value="{{amount}}" bindinput="onAmountInput" />
+        <input class="amount-input" type="digit" value="{{amount}}" bindinput="onAmountInput" />
       </view>
     </l-list>
     <l-list title="💳 支付状态" is-link="{{false}}" l-class="l-list-no-border">
@@ -59,9 +59,10 @@
   </view>
   <!-- Footer -->
   <view class="footer">
-    <l-button bg-color="#E88B9E" shape="circle" l-class="submit-btn-l" size="long" bindtap="onSubmit">保存</l-button>
+    <l-button bg-color="#E88B9E" shape="circle" l-class="submit-btn-l" size="long" bindtap="onSubmit">
+      保存
+    </l-button>
   </view>
-
   <!-- Project Picker Modal -->
   <view class="type-picker-mask" wx:if="{{showProjectModal}}" bindtap="hideProjectPicker"></view>
   <view class="type-picker-modal" wx:if="{{showProjectModal}}">
@@ -79,7 +80,6 @@
       <view class="type-empty" wx:if="{{filteredProjects.length === 0}}">暂无可选项目，请先创建项目</view>
     </scroll-view>
   </view>
-
   <!-- Expense Type Picker Modal -->
   <view class="type-picker-mask" wx:if="{{showTypeModal}}" bindtap="hideTypePicker"></view>
   <view class="type-picker-modal" wx:if="{{showTypeModal}}">

@@ -54,7 +54,9 @@
             </view>
           </view>
           <view class="item-amount-wrap">
-            <text class="item-amount">¥{{item.amount}}</text>
+            <span class="item-amount">
+              {{item.amount >= 0 && item.amount !== null ? '¥' + item.amount : '待定'}}
+            </span>
             <span class="status-tag {{item.paid ? 'paid' : 'unpaid'}}">
               {{item.paid ? '已付' : '未付'}}
             </span>

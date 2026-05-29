@@ -265,10 +265,9 @@ Page({
     if (!expenseTypeId) {
       return wx.showToast({ title: '请选择费用类型', icon: 'none' })
     }
-    const parsedAmount = parseFloat(amount)
-    if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
-      return wx.showToast({ title: '请输入有效金额', icon: 'none' })
-    }
+    const trimmedAmount = (amount || '').trim()
+    const parsedAmount = trimmedAmount ? parseFloat(trimmedAmount) : null
+
 
     wx.showLoading({ title: '保存中' })
     try {

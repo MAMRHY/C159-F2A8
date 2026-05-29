@@ -37,10 +37,6 @@
   width: 200rpx;
 }
 
-.amount-placeholder {
-  color: #333;
-}
-
 .status-text {
   font-size: 28rpx;
   color: #999;

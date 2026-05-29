@@ -32,11 +32,12 @@ Page({
     wx.showLoading({ title: '加载中' })
     try {
       const res = await db.collection('expenses').orderBy('createdAt', 'desc').limit(100).get()
+      // 规定大于0的数字是有效金额，小于0的数字为待定金额，保存的时候不允许输入小于0的金额，用于区分状态
       const allRecords = res.data.map(item => {
         const createdAtStr = item.createdAt ? this.formatDate(item.createdAt) : ''
         return {
           ...item,
-          amount: item.amount?.toFixed ? item.amount.toFixed(2) : (item.amount || 0).toFixed(2),
+          amount: item.amount >= 0 ? item.amount : -1,
           createdAtStr,
         }
       })
@@ -63,9 +64,15 @@ Page({
       records = allRecords.filter(item => !item.paid)
     }
 
-    // 汇总数据始终基于全量计算
-    const total = allRecords.reduce((sum, item) => sum + Number(item.amount || 0), 0)
-    const paid = allRecords.reduce((sum, item) => sum + (item.paid ? Number(item.amount || 0) : 0), 0)
+    // 汇总数据基于全量计算，排除非数值金额（如 "待定"）
+    const total = allRecords.reduce((sum, item) => {
+      const amt = item.amount >= 0 ? item.amount : 0;
+      return sum + amt
+    }, 0)
+    const paid = allRecords.reduce((sum, item) => {
+      const amt = item.paid ? item.amount : 0;
+      return sum + (item.paid ? amt : 0)
+    }, 0)
     const unpaid = total - paid
 
     this.setData({
