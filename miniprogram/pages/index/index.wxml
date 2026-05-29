@@ -117,11 +117,11 @@
       <!-- Action Buttons -->
       <view class="action-buttons">
         <view class="btn btn-primary" bindtap="goToAddExpense">
-          <text class="btn-icon">＋</text>
+          <image class="btn-icon" src="../../images/index/r_icon.png" />
           <text>记一笔</text>
         </view>
         <view class="btn btn-secondary" bindtap="goToAddProject">
-          <text class="btn-icon">＋</text>
+          <image class="btn-icon" src="../../images/index/p_icon.png" />
           <text>新增项目</text>
         </view>
       </view>

@@ -205,10 +205,8 @@ Page({
   },
 
   goToAddExpense() {
-    // 暂未实现
-    wx.showToast({
-      title: '记一笔',
-      icon: 'none'
+    wx.navigateTo({
+      url: '/pages/record-add/index',
     })
   },
 

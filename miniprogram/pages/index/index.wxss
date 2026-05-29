@@ -340,6 +340,7 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 40rpx;
+  gap: 20rpx;
 }
 
 .btn {
@@ -351,23 +352,24 @@
   justify-content: center;
   font-size: 32rpx;
   font-weight: 500;
-  color: #fff;
 }
 
 .btn-icon {
   margin-right: 12rpx;
-  font-size: 36rpx;
-  font-weight: 300;
+  width: 48rpx;
+  height: 48rpx;
 }
 
 .btn-primary {
-  background: #FF85A1;
+  border: 1px solid #FF85A1;
+  color: #FF85A1;
   margin-right: 20rpx;
   box-shadow: 0 8rpx 20rpx rgba(255, 133, 161, 0.3);
 }
 
 .btn-secondary {
-  background: #FF9EAB;
+  border: 1px solid #FF9EAB;
+  color: #FF9EAB;
   box-shadow: 0 8rpx 20rpx rgba(255, 158, 171, 0.3);
 }
 
