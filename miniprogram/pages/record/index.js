@@ -5,6 +5,7 @@ Page({
     activeTab: 0,      // 0=全部 1=已付 2=未付
     allRecords: [],    // 全量数据
     records: [],       // 当前 tab 展示
+    groupedRecords: [], // 按项目分组后的数据
     totalAmount: '0.00',
     paidAmount: '0.00',
     unpaidAmount: '0.00',
@@ -75,8 +76,35 @@ Page({
     }, 0)
     const unpaid = total - paid
 
+    // 按项目分组
+    const groupedMap = {}
+    records.forEach(item => {
+      const projName = item.projectName || '未知项目'
+      if (!groupedMap[projName]) {
+        groupedMap[projName] = {
+          projectName: projName,
+          records: [],
+          totalAmount: 0,
+          count: 0
+        }
+      }
+      groupedMap[projName].records.push(item)
+      groupedMap[projName].count++
+      if (item.amount >= 0 && item.amount !== null) {
+        groupedMap[projName].totalAmount += item.amount
+      }
+    })
+
+    const groupedRecords = Object.values(groupedMap).map(group => {
+      return {
+        ...group,
+        totalAmount: group.totalAmount.toFixed(2)
+      }
+    })
+
     this.setData({
       records,
+      groupedRecords,
       totalAmount: total.toFixed(2),
       paidAmount: paid.toFixed(2),
       unpaidAmount: unpaid.toFixed(2),

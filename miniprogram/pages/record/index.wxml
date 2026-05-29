@@ -32,41 +32,44 @@
   </view>
   <!-- List Content -->
   <view class="list-container">
-    <view class="category-card">
-      <view class="category-header">
-        <view class="category-left">
-          <view class="icon-wrap pink">
-            <text>📋</text>
+    <block wx:for="{{groupedRecords}}" wx:key="projectName" wx:for-item="group">
+      <view class="category-card">
+        <view class="category-header">
+          <view class="category-left">
+            <view class="icon-wrap pink">
+              <text>📋</text>
+            </view>
+            <text class="category-title">{{group.projectName}}</text>
           </view>
-          <text class="category-title">费用明细</text>
+          <view class="category-right">
+            <text class="category-count">共 {{group.count}} 项</text>
+            <text class="category-total">¥{{group.totalAmount}}</text>
+          </view>
         </view>
-        <view class="category-right">
-          <text class="category-count">共 {{records.length}} 项</text>
-          <text class="category-total">¥{{totalAmount}}</text>
-        </view>
-      </view>
-      <view class="item-list">
-        <view wx:for="{{records}}" wx:key="_id" class="record-item border-bottom" bindtap="onEditRecord" bindlongpress="onDeleteRecord" data-id="{{item._id}}" data-project="{{item.projectName}}" data-type="{{item.expenseTypeName}}">
-          <view class="item-info">
-            <view class="item-name">{{item.projectName || '未知项目'}}</view>
-            <view class="item-desc">
-              {{item.expenseTypeName || '未知类型'}} · {{item.paymentDate || item.createdAtStr}}
+        <view class="item-list">
+          <view wx:for="{{group.records}}" wx:key="_id" class="record-item border-bottom" bindtap="onEditRecord" bindlongpress="onDeleteRecord" data-id="{{item._id}}" data-project="{{item.projectName}}" data-type="{{item.expenseTypeName}}">
+            <view class="item-info">
+              <view class="item-name">{{item.expenseTypeName || '未知类型'}}</view>
+              <view class="item-desc">
+                {{item.paymentDate || item.createdAtStr}}
+              </view>
+            </view>
+            <view class="item-amount-wrap">
+              <span class="item-amount">
+                {{item.amount >= 0 && item.amount !== null ? '¥' + item.amount : '待定'}}
+              </span>
+              <span class="status-tag {{item.paid ? 'paid' : 'unpaid'}}">
+                {{item.paid ? '已付' : '未付'}}
+              </span>
             </view>
           </view>
-          <view class="item-amount-wrap">
-            <span class="item-amount">
-              {{item.amount >= 0 && item.amount !== null ? '¥' + item.amount : '待定'}}
-            </span>
-            <span class="status-tag {{item.paid ? 'paid' : 'unpaid'}}">
-              {{item.paid ? '已付' : '未付'}}
-            </span>
-          </view>
         </view>
-        <!-- 删除确认弹窗 -->
-        <l-dialog show="{{showDeleteDialog}}" type="confirm" title="确认删除" content="确认删除 {{deleteRecordInfo}} 吗？" confirmText="确认" cancelText="取消" confirmColor="#FF4D4F" bind:linconfirm="onConfirmDeleteRecord" bind:lincancel="onCancelDeleteRecord" />
-        <view class="type-empty" wx:if="{{records.length === 0}}">暂无费用记录，点击下方按钮新增</view>
       </view>
-    </view>
+    </block>
+
+    <!-- 删除确认弹窗 -->
+    <l-dialog show="{{showDeleteDialog}}" type="confirm" title="确认删除" content="确认删除 {{deleteRecordInfo}} 吗？" confirmText="确认" cancelText="取消" confirmColor="#FF4D4F" bind:linconfirm="onConfirmDeleteRecord" bind:lincancel="onCancelDeleteRecord" />
+    <view class="type-empty" wx:if="{{records.length === 0}}">暂无费用记录，点击下方按钮新增</view>
   </view>
   <!-- Floating Add Button -->
   <view class="fab-btn" bindtap="onAddRecord">
