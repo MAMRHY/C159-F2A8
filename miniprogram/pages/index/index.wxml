@@ -102,10 +102,10 @@
             <!-- <text class="card-title">婚礼倒计时</text> -->
           </view>
           <view class="countdown-days">
-            <text class="days-num">145</text>
+            <text class="days-num">{{countdownDays}}</text>
             <text class="days-unit">天</text>
           </view>
-          <text class="countdown-label">距离婚礼还有</text>
+          <text class="countdown-label">{{countdownLabel}}</text>
         </view>
         <view class="countdown-img-wrap">
           <!-- Placeholder for calendar illustration -->

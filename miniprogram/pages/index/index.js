@@ -15,7 +15,9 @@ Page({
     formattedTotalBudget: '0',
     formattedTotalSpent: '0',
     formattedTotalPaid: '0',
-    showLabels: false
+    showLabels: false,
+    countdownDays: '-',
+    countdownLabel: '距离婚礼还有'
   },
 
   onPageScroll(e) {
@@ -83,11 +85,38 @@ Page({
         app.globalData.openid = openid;
       }
 
-      // 获取总预算
+      // 获取总预算和婚期
       const weddingRes = await db.collection('wedding_info').where({ _openid: openid }).get();
       let totalBudget = 0;
+      let weddingDate = '';
       if (weddingRes.data.length > 0) {
         totalBudget = weddingRes.data[0].budget || 0;
+        weddingDate = weddingRes.data[0].date || '';
+      }
+
+      let countdownDays = '';
+      let countdownLabel = '距离婚礼还有';
+
+      if (weddingDate) {
+        // 兼容 iOS
+        const safeDateStr = weddingDate.replace(/-/g, '/');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const targetDate = new Date(safeDateStr);
+        targetDate.setHours(0, 0, 0, 0);
+
+        const diffTime = targetDate.getTime() - today.getTime();
+        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays >= 0) {
+          countdownDays = diffDays;
+          countdownLabel = '距离婚礼还有';
+        } else {
+          countdownDays = Math.abs(diffDays);
+          countdownLabel = '新婚快乐';
+        }
+      } else {
+        countdownLabel = '未设置婚期';
       }
 
       // 获取所有支出
@@ -134,6 +163,8 @@ Page({
         formattedTotalBudget: this.formatNumber(totalBudget),
         formattedTotalSpent: this.formatNumber(totalSpent),
         formattedTotalPaid: this.formatNumber(totalPaid),
+        countdownDays,
+        countdownLabel,
         showLabels: false
       }, () => {
         setTimeout(() => {
