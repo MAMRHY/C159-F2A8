@@ -1,0 +1,198 @@
+page {
+  background: linear-gradient(180deg, #FFF0F2 0%, #FDF6F7 100%);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 30rpx;
+  box-sizing: border-box;
+}
+
+.profile-card {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  box-shadow: 0 12rpx 40rpx rgba(215, 126, 143, 0.12);
+  padding: 50rpx 40rpx;
+  box-sizing: border-box;
+  margin-top: 40rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 顶部装饰花朵及标题 */
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 50rpx;
+  position: relative;
+  z-index: 2;
+}
+
+.header-decor {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.85;
+}
+
+.card-title {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 12rpx;
+  letter-spacing: 2rpx;
+}
+
+.card-subtitle {
+  font-size: 24rpx;
+  color: #888888;
+  line-height: 34rpx;
+  padding: 0 20rpx;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+/* 头像上传区域 */
+.avatar-upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60rpx;
+}
+
+.avatar-btn {
+  padding: 0 !important;
+  margin: 0 auto !important;
+  width: 170rpx !important;
+  height: 170rpx !important;
+  min-height: 170rpx !important;
+  border-radius: 50% !important;
+  background: #F8F8F8 !important;
+  border: 6rpx solid #FFF0F2 !important;
+  box-shadow: 0 8rpx 24rpx rgba(215, 126, 143, 0.15) !important;
+  position: relative;
+  overflow: visible;
+  line-height: normal;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box !important;
+}
+
+.avatar-btn::after {
+  border: none !important;
+}
+
+.avatar-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.avatar-camera-icon {
+  position: absolute;
+  bottom: 0rpx;
+  right: 0rpx;
+  width: 54rpx;
+  height: 54rpx;
+  border-radius: 50%;
+  background: #FF85A1;
+  border: 4rpx solid #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.camera-text {
+  font-size: 24rpx;
+}
+
+.upload-tip {
+  font-size: 24rpx;
+  color: #D77E8F;
+  margin-top: 18rpx;
+  font-weight: 500;
+}
+
+/* 表单输入框 */
+.form-item {
+  margin-bottom: 50rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #444444;
+  margin-bottom: 20rpx;
+}
+
+.required {
+  color: #FF85A1;
+  margin-right: 6rpx;
+  font-weight: bold;
+}
+
+.form-input-wrap {
+  background-color: #FDF9FA;
+  border: 2rpx solid #FFE4E8;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  height: 90rpx;
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+  height: 100%;
+  font-size: 28rpx;
+  color: #333333;
+}
+
+/* 保存按钮 */
+.save-btn {
+  width: 100%;
+  height: 100rpx;
+  border-radius: 50rpx;
+  background: #E0E0E0;
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  margin-top: 20rpx;
+}
+
+.save-btn.active {
+  background: linear-gradient(135deg, #FF94B0 0%, #FF6B8B 100%);
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 139, 0.35);
+}
+
+.save-btn.active:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* 底部提示 */
+.footer-tip {
+  margin-top: 60rpx;
+  font-size: 22rpx;
+  color: #B0B0B0;
+  text-align: center;
+}

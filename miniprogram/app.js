@@ -8,6 +8,7 @@ App({
       env: "cloud1-d1g3j2yfxa7019d32",
       openid: null,
       hasWedding: false,
+      userInfo: null,
       loginPromise: null
     };
     if (!wx.cloud) {
@@ -42,16 +43,28 @@ App({
             lastLoginTime: db.serverDate()
           }
         });
+        this.globalData.userInfo = null;
       } else {
-        await db.collection('users').doc(userRes.data[0]._id).update({
+        const user = userRes.data[0];
+        await db.collection('users').doc(user._id).update({
           data: {
             lastLoginTime: db.serverDate()
           }
         });
+        this.globalData.userInfo = {
+          avatarUrl: user.avatarUrl || '',
+          nickName: user.nickName || ''
+        };
       }
 
-      // 检查 wedding_info
-      const weddingRes = await db.collection('wedding_info').where({ _openid: openid }).get();
+      // 检查 wedding_info (支持双人协同：我是创建者，或者我是被邀请的伴侣)
+      const _ = db.command;
+      const weddingRes = await db.collection('wedding_info').where(
+        _.or([
+          { _openid: openid },
+          { partnerOpenid: openid }
+        ])
+      ).get();
       this.globalData.hasWedding = weddingRes.data.length > 0;
 
       return this.globalData;

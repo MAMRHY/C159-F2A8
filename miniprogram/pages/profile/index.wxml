@@ -1,2 +1,36 @@
-<!--pages/profile/index.wxml-->
-<text>pages/profile/index.wxml</text>
+<view class="page-container">
+  <view class="profile-card">
+    <view class="card-header">
+      <image class="header-decor" src="../../images/icons/mine_flower.png"></image>
+      <text class="card-title">完善你的备婚名片</text>
+      <text class="card-subtitle">完善头像和昵称，开启备婚双人协同新体验</text>
+    </view>
+    <view class="form-container">
+      <!-- 头像上传区域 -->
+      <view class="avatar-upload-section">
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image class="avatar-preview" src="{{avatarUrl || 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'}}"></image>
+          <view class="avatar-camera-icon">
+            <text class="camera-text">📷</text>
+          </view>
+        </button>
+        <text class="upload-tip">点击上传头像</text>
+      </view>
+      <!-- 昵称输入区域 -->
+      <view class="form-item">
+        <view class="form-label">
+          <text class="required">*</text>
+          昵称
+        </view>
+        <view class="form-input-wrap">
+          <input class="form-input" type="nickname" placeholder="请输入或选择微信昵称" value="{{nickName}}" bindinput="onNicknameInput" bindblur="onNicknameBlur" />
+        </view>
+      </view>
+      <!-- 保存按钮 -->
+      <view class="save-btn {{avatarUrl && nickName ? 'active' : ''}}" bindtap="onSave">保存名片</view>
+    </view>
+  </view>
+  <view class="footer-tip">
+    <text>信息仅用于账本内的双人协同和负责人展示</text>
+  </view>
+</view>

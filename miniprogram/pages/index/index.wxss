@@ -120,14 +120,14 @@
 }
 
 .avatar {
-  width: 54rpx;
-  height: 54rpx;
+  width: 58rpx;
+  height: 58rpx;
   border-radius: 50%;
   border: 4rpx solid #fff;
 }
 
 .avatar-2 {
-  margin-left: -16rpx;
+  margin-left: -12rpx;
 }
 
 /* Common Card */
@@ -459,4 +459,121 @@
 .item-arrow {
   font-size: 24rpx;
   color: #CCC;
+}
+
+/* 协作邀请头像与弹窗 */
+.avatar-invite {
+  background-color: #FFF0F2;
+  border: 4rpx dashed #FF85A1 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.invite-plus {
+  color: #FF85A1;
+  font-size: 28rpx;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* 邀请模态浮层 */
+.invite-modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  backdrop-filter: blur(8px);
+}
+
+.invite-modal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border-radius: 40rpx 40rpx 0 0;
+  padding: 60rpx 40rpx;
+  padding-bottom: calc(60rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-shadow: 0 -10rpx 40rpx rgba(215, 126, 143, 0.15);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.invite-modal-decor {
+  font-size: 24rpx;
+  color: #FF85A1;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+  background: #FFF0F2;
+  padding: 8rpx 24rpx;
+  border-radius: 20rpx;
+  letter-spacing: 2rpx;
+}
+
+.invite-modal-title {
+  font-size: 38rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 24rpx;
+}
+
+.invite-modal-desc {
+  font-size: 26rpx;
+  color: #777777;
+  line-height: 40rpx;
+  text-align: center;
+  margin-bottom: 50rpx;
+  padding: 0 20rpx;
+}
+
+.invite-share-btn {
+  width: 100% !important;
+  height: 100rpx;
+  border-radius: 50rpx;
+  background: linear-gradient(135deg, #FF94B0 0%, #FF6B8B 100%);
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 139, 0.35);
+  margin-bottom: 30rpx;
+  border: none;
+  padding: 0;
+  line-height: normal;
+}
+
+.invite-share-btn::after {
+  border: none;
+}
+
+.invite-share-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.invite-modal-close {
+  font-size: 26rpx;
+  color: #999999;
+  padding: 20rpx;
 }

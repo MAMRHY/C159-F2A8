@@ -3,8 +3,16 @@
   <view class="header-content">
     <text class="header-title">备婚财务管家</text>
     <view class="header-avatars">
-      <image class="avatar" src="https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0" />
-      <image class="avatar avatar-2" src="https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0" />
+      <!-- 渲染已存在的成员头像 -->
+      <block wx:for="{{memberAvatars}}" wx:key="openid">
+        <image class="avatar {{index === 1 ? 'avatar-2' : ''}}" src="{{item.avatarUrl}}" bindtap="onAvatarTap" data-type="self" data-index="{{index}}" />
+      </block>
+      <!-- 如果只有一个成员，显示一个带 + 号的邀请头像 -->
+      <block wx:if="{{memberAvatars.length === 1}}">
+        <view class="avatar avatar-2 avatar-invite" bindtap="onAvatarTap" data-type="invite">
+          <text class="invite-plus">+</text>
+        </view>
+      </block>
     </view>
   </view>
 </view>
@@ -173,3 +181,17 @@
     </view>
   </block>
 </scroll-view>
+
+<!-- 邀请弹窗 -->
+<view class="invite-modal-mask" wx:if="{{showInviteModal}}" bindtap="hideInviteModal"></view>
+<view class="invite-modal" wx:if="{{showInviteModal}}">
+  <view class="invite-modal-decor">✨ 双人协同备婚 ✨</view>
+  <view class="invite-modal-title">邀请另一半加入</view>
+  <view class="invite-modal-desc">
+    邀请伴侣加入后，双方可实时共享婚礼账本、共同管理财务预算与记账，一起为完美婚礼出发！
+  </view>
+  <button class="invite-share-btn" open-type="share">
+    发送邀请链接给伴侣
+  </button>
+  <view class="invite-modal-close" bindtap="hideInviteModal">暂不邀请</view>
+</view>

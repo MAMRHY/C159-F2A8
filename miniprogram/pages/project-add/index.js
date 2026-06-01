@@ -1,3 +1,4 @@
+const app = getApp()
 const db = wx.cloud.database()
 
 Page({
@@ -17,7 +18,11 @@ Page({
     typeSearchKey: '',
     types: [],
     filteredTypes: [],
-    hasExactMatch: false
+    hasExactMatch: false,
+
+    // 协同成员
+    members: [],
+    currentOpenid: ''
   },
 
   onLoad(options) {
@@ -30,6 +35,7 @@ Page({
     }
     
     this.fetchTypes()
+    this.fetchMembers()
   },
 
   onInput(e) {
@@ -182,5 +188,79 @@ Page({
     } finally {
       wx.hideLoading()
     }
+  },
+
+  // 获取婚礼账本成员以做负责人单选
+  async fetchMembers() {
+    try {
+      const openid = app.globalData.openid || '';
+      this.setData({ currentOpenid: openid });
+      
+      const db = wx.cloud.database();
+      const _ = db.command;
+      
+      // 1. 先查出当前婚礼
+      const weddingRes = await db.collection('wedding_info').where(
+        _.or([
+          { _openid: openid },
+          { partnerOpenid: openid }
+        ])
+      ).get();
+      
+      let membersOpenids = [openid]; // 默认至少有自己
+      
+      if (weddingRes.data.length > 0) {
+        const wedding = weddingRes.data[0];
+        membersOpenids = [wedding._openid];
+        if (wedding.partnerOpenid) {
+          membersOpenids.push(wedding.partnerOpenid);
+        }
+      }
+      
+      // 2. 查出这些 Openid 对应的 users 记录
+      const usersRes = await db.collection('users').where({
+        _openid: _.in(membersOpenids)
+      }).get();
+      
+      let members = [];
+      membersOpenids.forEach(mOpenid => {
+        const user = usersRes.data.find(u => u._openid === mOpenid);
+        if (user) {
+          members.push({
+            openid: mOpenid,
+            avatarUrl: user.avatarUrl || 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
+            nickName: user.nickName || (mOpenid === openid ? '我' : '伴侣')
+          });
+        } else {
+          members.push({
+            openid: mOpenid,
+            avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0',
+            nickName: mOpenid === openid ? '我' : '伴侣'
+          });
+        }
+      });
+      
+      this.setData({ members });
+      
+      // 3. 如果是新增模式且没有设置过 leader，默认勾选当前登录的这个人
+      if (!this.data.isEdit && !this.data.leader) {
+        const currentUser = members.find(m => m.openid === openid);
+        if (currentUser) {
+          this.setData({
+            leader: currentUser.nickName
+          });
+        }
+      }
+      
+    } catch (e) {
+      console.error('获取成员失败', e);
+    }
+  },
+
+  onSelectLeader(e) {
+    const { name } = e.currentTarget.dataset;
+    this.setData({
+      leader: name
+    });
   }
 })

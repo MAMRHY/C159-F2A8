@@ -24,8 +24,14 @@
         <text class="required">*</text>
         负责人
       </view>
-      <view class="form-input-wrap">
-        <input class="form-input" placeholder="请输入负责人姓名" value="{{leader}}" bindinput="onInput" data-field="leader" />
+      <view class="leader-radio-group">
+        <view class="leader-radio-item {{leader === item.nickName ? 'active' : ''}}" wx:for="{{members}}" wx:key="openid" bindtap="onSelectLeader" data-name="{{item.nickName}}">
+          <image class="leader-avatar" src="{{item.avatarUrl}}"></image>
+          <text class="leader-name">{{item.nickName}}</text>
+          <view class="radio-circle">
+            <view class="radio-inner" wx:if="{{leader === item.nickName}}"></view>
+          </view>
+        </view>
       </view>
     </view>
     <view class="form-item">
