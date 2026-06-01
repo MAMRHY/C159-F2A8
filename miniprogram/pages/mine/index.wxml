@@ -1,4 +1,17 @@
 <view class="mine-container">
+  <!-- 用户名片区域 (点击跳转 profile) -->
+  <view class="user-profile-card" bindtap="goToProfile">
+    <image class="user-avatar" src="{{userInfo.avatarUrl || 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'}}"></image>
+    <view class="user-info-area">
+      <text class="user-nickname">{{userInfo.nickName || '备婚新人 (点击完善)'}}</text>
+      <view class="user-tag-wrap">
+        <text class="user-status-tag">💑 备婚名片</text>
+        <text class="user-click-tip">完善资料，开启双人协同</text>
+      </view>
+    </view>
+    <view class="arrow-right-icon"></view>
+  </view>
+
   <view class="mine-top" wx:if="{{weddingInfo}}">
     <image class="top-img" src="../../images/icons/mine_flower.png"></image>
     <view class="top-left">

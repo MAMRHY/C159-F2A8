@@ -73,6 +73,74 @@
   padding: 20rpx;
   text-align: center;
   border-radius: 20rpx;
-  border: 1px solid #EACDC9;
   margin: 20rpx auto;
+}
+
+/* 用户名片卡片 */
+.user-profile-card {
+  display: flex;
+  align-items: center;
+  border-radius: 24rpx;
+  padding: 36rpx 30rpx;
+  margin-bottom: 30rpx;
+  border: 1px solid #FFE4E8;
+  box-shadow: 0 8rpx 20rpx rgba(255, 133, 161, 0.05);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.user-profile-card:active {
+  transform: scale(0.99);
+  opacity: 0.95;
+}
+
+.user-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  border: 4rpx solid #FFFFFF;
+  box-shadow: 0 4rpx 12rpx rgba(215, 126, 143, 0.15);
+  margin-right: 24rpx;
+}
+
+.user-info-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.user-nickname {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.user-tag-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.user-status-tag {
+  font-size: 20rpx;
+  color: #FF85A1;
+  background: rgba(255, 133, 161, 0.12);
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.user-click-tip {
+  font-size: 20rpx;
+  color: #A0A0A0;
+}
+
+.arrow-right-icon {
+  width: 16rpx;
+  height: 16rpx;
+  border-top: 3rpx solid #D77E8F;
+  border-right: 3rpx solid #D77E8F;
+  transform: rotate(45deg);
+  margin-right: 10rpx;
 }
