@@ -1,5 +1,5 @@
 <!-- Custom Navigation Header -->
-<view wx:if="{{hasWedding}}" class="custom-header" style="padding-top: {{statusBarHeight + 10}}px; height: {{navBarHeight}}px; background-color: {{headerBg}};">
+<view class="custom-header" style="padding-top: {{statusBarHeight + 10}}px; height: {{navBarHeight}}px; background-color: {{headerBg}};">
   <view class="header-content">
     <text class="header-title">备婚财务管家</text>
     <view class="header-avatars">
@@ -17,169 +17,139 @@
   </view>
 </view>
 <scroll-view scroll-y style="height: 100vh;" bindscroll="onScroll">
-  <view wx:if="{{isLoading}}" class="loading-container">
-    <text>加载中...</text>
-  </view>
-  <block wx:elif="{{!hasWedding}}">
-    <view class="splash-container">
-      <view class="splash-header">
-        <text class="splash-title">婚礼财务管家</text>
-        <text class="splash-subtitle">让备婚更简单</text>
-      </view>
-      <view class="splash-features">
-        <view class="feature-item">
-          <image class="feature-icon" src="../../images/index/icon1.png"></image>
-          <text class="feature-text">清晰的预算管理</text>
+  <view class="page-container">
+    <!-- Header Placeholder -->
+    <view style="padding-top: {{statusBarHeight + 10}}px; height: {{navBarHeight}}px; margin-bottom: 30rpx;"></view>
+    <!-- Budget Card -->
+    <view class="card budget-card">
+      <view class="card-header">
+        <view class="icon-wrap">
+          <span class="icon">
+            <image src="../../images/index/qizhi.png" />
+          </span>
         </view>
-        <view class="feature-item">
-          <image class="feature-icon" src="../../images/index/icon2.png"></image>
-          <text class="feature-text">项目分类统计</text>
-        </view>
-        <view class="feature-item">
-          <image class="feature-icon" src="../../images/index/icon3.png"></image>
-          <text class="feature-text">双人协同管理</text>
+        <text class="card-title">预算进度</text>
+        <view bindtap="handleHelpTap" style="padding: 10rpx; display: flex; align-items: center;">
+          <l-icon name='help' size="30" color="#999" />
         </view>
       </view>
-      <view class="splash-footer">
-        <view class="btn-start" bindtap="handleStartWedding">开启我的婚礼</view>
+      <view class="budget-content-new">
+        <view class="progress-bar-wrap">
+          <!-- 上方悬浮标签：已付 -->
+          <view class="bubble bubble-top {{showLabels ? 'show' : ''}}" style="left: {{paidPercent}}%;">
+            <text>已付 {{paidPercent}}%</text>
+            <view class="bubble-arrow-down"></view>
+          </view>
+          <view class="progress-bar-bg">
+            <view class="progress-bar-fill-spent" style="width: {{spentPercent}}%;"></view>
+            <view class="progress-bar-fill-paid" style="width: {{paidPercent}}%;"></view>
+          </view>
+          <!-- 下方悬浮标签：已支 -->
+          <view class="bubble bubble-bottom {{showLabels ? 'show' : ''}}" style="left: {{spentPercent}}%;">
+            <view class="bubble-arrow-up"></view>
+            <text>已支 {{spentPercent}}%</text>
+          </view>
+          <view class="progress-labels">
+            <text>0%</text>
+            <text>100%</text>
+          </view>
+        </view>
+      </view>
+      <view class="divider"></view>
+      <view class="budget-footer">
+        <view style="display: flex; justify-content: space-between; width: 100%; font-size: 24rpx; color: #666;">
+          <span>
+            已支
+            <text style="color: #bfd7fb;">¥{{formattedTotalSpent}}</text>
+            / ¥{{formattedTotalBudget}}
+          </span>
+          <span>
+            已付
+            <text class="highlight">¥{{formattedTotalPaid}}</text>
+          </span>
+        </view>
       </view>
     </view>
-  </block>
-  <block wx:else>
-    <view class="page-container">
-      <!-- Header Placeholder -->
-      <view style="padding-top: {{statusBarHeight + 10}}px; height: {{navBarHeight}}px; margin-bottom: 30rpx;"></view>
-      <!-- Budget Card -->
-      <view class="card budget-card">
+    <!-- Countdown Card -->
+    <view class="card countdown-card">
+      <view class="countdown-info">
         <view class="card-header">
           <view class="icon-wrap">
-            <span class="icon">
-              <image src="../../images/index/qizhi.png" />
-            </span>
+            <text class="icon">📅</text>
           </view>
-          <text class="card-title">预算进度</text>
-          <view bindtap="handleHelpTap" style="padding: 10rpx; display: flex; align-items: center;">
-            <l-icon name='help' size="30" color="#999" />
-          </view>
+          <!-- Todo 完善婚礼当天的样式 -->
+          <text class="card-title">倒计时</text>
         </view>
-        <view class="budget-content-new">
-          <view class="progress-bar-wrap">
-            <!-- 上方悬浮标签：已付 -->
-            <view class="bubble bubble-top {{showLabels ? 'show' : ''}}" style="left: {{paidPercent}}%;">
-              <text>已付 {{paidPercent}}%</text>
-              <view class="bubble-arrow-down"></view>
-            </view>
-            <view class="progress-bar-bg">
-              <view class="progress-bar-fill-spent" style="width: {{spentPercent}}%;"></view>
-              <view class="progress-bar-fill-paid" style="width: {{paidPercent}}%;"></view>
-            </view>
-            <!-- 下方悬浮标签：已支 -->
-            <view class="bubble bubble-bottom {{showLabels ? 'show' : ''}}" style="left: {{spentPercent}}%;">
-              <view class="bubble-arrow-up"></view>
-              <text>已支 {{spentPercent}}%</text>
-            </view>
-            <view class="progress-labels">
-              <text>0%</text>
-              <text>100%</text>
-            </view>
-          </view>
+        <view class="countdown-days">
+          <text class="days-num">{{countdownDays}}</text>
+          <text class="days-unit">天</text>
         </view>
-        <view class="divider"></view>
-        <view class="budget-footer">
-          <view style="display: flex; justify-content: space-between; width: 100%; font-size: 24rpx; color: #666;">
-            <span>
-              已支
-              <text style="color: #bfd7fb;">¥{{formattedTotalSpent}}</text>
-              / ¥{{formattedTotalBudget}}
-            </span>
-            <span>
-              已付
-              <text class="highlight">¥{{formattedTotalPaid}}</text>
-            </span>
-          </view>
-        </view>
+        <text class="countdown-label">{{countdownLabel}}</text>
       </view>
-      <!-- Countdown Card -->
-      <view class="card countdown-card">
-        <view class="countdown-info">
-          <view class="card-header">
-            <view class="icon-wrap">
-              <text class="icon">📅</text>
-            </view>
-            <!-- Todo 完善婚礼当天的样式 -->
-            <text class="card-title">倒计时</text>
-          </view>
-          <view class="countdown-days">
-            <text class="days-num">{{countdownDays}}</text>
-            <text class="days-unit">天</text>
-          </view>
-          <text class="countdown-label">{{countdownLabel}}</text>
-        </view>
-        <view class="countdown-img-wrap">
-          <!-- Placeholder for calendar illustration -->
-          <view class="calendar-img-placeholder">
-            <image src="../../images/index/indexImg1.png"></image>
-          </view>
-        </view>
-      </view>
-      <!-- Action Buttons -->
-      <view class="action-buttons">
-        <view class="btn btn-primary" bindtap="goToAddExpense">
-          <image class="btn-icon" src="../../images/index/r_icon.png" />
-          <text>记一笔</text>
-        </view>
-        <view class="btn btn-secondary" bindtap="goToAddProject">
-          <image class="btn-icon" src="../../images/index/p_icon.png" />
-          <text>新增项目</text>
-        </view>
-      </view>
-      <!-- Recent Expenses todo 暂不开放 -->
-      <view class="recent-section" wx:if="{{false}}">
-        <view class="section-header" bindtap="goToAllExpenses">
-          <text class="section-title">最近支出</text>
-          <text class="section-more">查看全部</text>
-        </view>
-        <view class="expense-list">
-          <!-- Item 1 -->
-          <view class="expense-item">
-            <view class="item-icon-wrap">
-              <text class="item-icon">📷</text>
-            </view>
-            <view class="item-info">
-              <text class="item-name">婚纱摄影 定金</text>
-              <text class="item-desc">今天 14:30 · 张三</text>
-            </view>
-            <view class="item-amount highlight">-¥5,000</view>
-            <text class="item-arrow">></text>
-          </view>
-          <!-- Item 2 -->
-          <view class="expense-item">
-            <view class="item-icon-wrap bg-blue">
-              <text class="item-icon">🏨</text>
-            </view>
-            <view class="item-info">
-              <text class="item-name">婚宴酒店 预订</text>
-              <text class="item-desc">昨天 10:20 · 李四</text>
-            </view>
-            <view class="item-amount highlight">-¥30,000</view>
-            <text class="item-arrow">></text>
-          </view>
-          <!-- Item 3 -->
-          <view class="expense-item">
-            <view class="item-icon-wrap bg-yellow">
-              <text class="item-icon">👗</text>
-            </view>
-            <view class="item-info">
-              <text class="item-name">婚纱礼服 试纱</text>
-              <text class="item-desc">05-15 16:45 · 王五</text>
-            </view>
-            <view class="item-amount highlight">-¥3,200</view>
-            <text class="item-arrow">></text>
-          </view>
+      <view class="countdown-img-wrap">
+        <!-- Placeholder for calendar illustration -->
+        <view class="calendar-img-placeholder">
+          <image src="../../images/index/indexImg1.png"></image>
         </view>
       </view>
     </view>
-  </block>
+    <!-- Action Buttons -->
+    <view class="action-buttons">
+      <view class="btn btn-primary" bindtap="goToAddExpense">
+        <image class="btn-icon" src="../../images/index/r_icon.png" />
+        <text>记一笔</text>
+      </view>
+      <view class="btn btn-secondary" bindtap="goToAddProject">
+        <image class="btn-icon" src="../../images/index/p_icon.png" />
+        <text>新增项目</text>
+      </view>
+    </view>
+    <!-- Recent Expenses todo 暂不开放 -->
+    <view class="recent-section" wx:if="{{false}}">
+      <view class="section-header" bindtap="goToAllExpenses">
+        <text class="section-title">最近支出</text>
+        <text class="section-more">查看全部</text>
+      </view>
+      <view class="expense-list">
+        <!-- Item 1 -->
+        <view class="expense-item">
+          <view class="item-icon-wrap">
+            <text class="item-icon">📷</text>
+          </view>
+          <view class="item-info">
+            <text class="item-name">婚纱摄影 定金</text>
+            <text class="item-desc">今天 14:30 · 张三</text>
+          </view>
+          <view class="item-amount highlight">-¥5,000</view>
+          <text class="item-arrow">></text>
+        </view>
+        <!-- Item 2 -->
+        <view class="expense-item">
+          <view class="item-icon-wrap bg-blue">
+            <text class="item-icon">🏨</text>
+          </view>
+          <view class="item-info">
+            <text class="item-name">婚宴酒店 预订</text>
+            <text class="item-desc">昨天 10:20 · 李四</text>
+          </view>
+          <view class="item-amount highlight">-¥30,000</view>
+          <text class="item-arrow">></text>
+        </view>
+        <!-- Item 3 -->
+        <view class="expense-item">
+          <view class="item-icon-wrap bg-yellow">
+            <text class="item-icon">👗</text>
+          </view>
+          <view class="item-info">
+            <text class="item-name">婚纱礼服 试纱</text>
+            <text class="item-desc">05-15 16:45 · 王五</text>
+          </view>
+          <view class="item-amount highlight">-¥3,200</view>
+          <text class="item-arrow">></text>
+        </view>
+      </view>
+    </view>
+  </view>
 </scroll-view>
 
 <!-- 邀请弹窗 -->

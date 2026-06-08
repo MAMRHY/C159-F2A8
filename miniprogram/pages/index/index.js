@@ -45,10 +45,7 @@ Page({
     })
   },
 
-  onLoad(options) {
-    if (options && options.inviterWeddingId) {
-      this.inviterWeddingId = options.inviterWeddingId
-    }
+  onLoad() {
     const info = wx.getSystemInfoSync()
     const menuButtonInfo = wx.getMenuButtonBoundingClientRect()
     // 导航栏高度 = 胶囊下边界 + 胶囊上边界 - 状态栏高度
@@ -60,34 +57,21 @@ Page({
   },
 
   onShow() {
-    // 每次显示页面时，重新检查状态
     if (app.globalData.loginPromise) {
       app.globalData.loginPromise.then(res => {
-        this.setData({
-          isLoading: false,
-          hasWedding: app.globalData.hasWedding
-        });
-        
-        // 处理邀请绑定逻辑
-        if (this.inviterWeddingId) {
-          this.checkAndProcessInvitation(this.inviterWeddingId);
-          this.inviterWeddingId = ''; // 消费后清除
-        } else if (app.globalData.hasWedding) {
+        if (app.globalData.hasWedding) {
           this.fetchBudgetData();
+        } else {
+          wx.reLaunch({ url: '/pages/splash/index' });
         }
       }).catch(err => {
-        this.setData({ isLoading: false });
         wx.showToast({ title: '加载失败', icon: 'none' });
       });
     } else {
-      this.setData({ isLoading: false, hasWedding: app.globalData.hasWedding || false });
-      
-      // 处理邀请绑定逻辑
-      if (this.inviterWeddingId) {
-        this.checkAndProcessInvitation(this.inviterWeddingId);
-        this.inviterWeddingId = ''; // 消费后清除
-      } else if (app.globalData.hasWedding) {
+      if (app.globalData.hasWedding) {
         this.fetchBudgetData();
+      } else {
+        wx.reLaunch({ url: '/pages/splash/index' });
       }
     }
   },
@@ -253,19 +237,6 @@ Page({
     return Number(num).toLocaleString('zh-CN');
   },
 
-  handleStartWedding() {
-    // 已经静默登录过获取了 openid，直接跳转即可
-    if (!app.globalData.openid) {
-      wx.showToast({ title: '登录信息获取失败，请重试', icon: 'none' });
-      // 可以考虑重试获取 openid
-      app.globalData.loginPromise = app.loginAndCheckWedding();
-      return;
-    }
-    wx.navigateTo({
-      url: '/pages/wedding-create/index'
-    });
-  },
-
   goToAddExpense() {
     wx.navigateTo({
       url: '/pages/record-add/index',
@@ -282,121 +253,6 @@ Page({
     wx.navigateTo({
       url: '/pages/project-add/index',
     })
-  },
-
-  // 检测邀请绑定逻辑
-  async checkAndProcessInvitation(inviterWeddingId) {
-    const openid = app.globalData.openid;
-    if (!openid) return;
-
-    try {
-      const db = wx.cloud.database();
-      
-      // 1. 如果用户自己已经有婚礼了，检查是否就是该婚礼
-      const myWeddingRes = await db.collection('wedding_info').where(
-        db.command.or([
-          { _openid: openid },
-          { partnerOpenid: openid }
-        ])
-      ).get();
-
-      if (myWeddingRes.data.length > 0) {
-        const myWedding = myWeddingRes.data[0];
-        if (myWedding._id === inviterWeddingId) {
-          wx.showToast({ title: '你已加入该婚礼账本', icon: 'none' });
-          this.fetchBudgetData();
-          return;
-        } else {
-          wx.showModal({
-            title: '无法加入',
-            content: '你已经关联了其他婚礼财务账本，无法同时加入多个账本。',
-            showCancel: false
-          });
-          this.fetchBudgetData();
-          return;
-        }
-      }
-
-      // 2. 还没有婚礼账本，拉取邀请人姓名（昵称）以做友好提示
-      const inviterWedding = await db.collection('wedding_info').doc(inviterWeddingId).get();
-      if (!inviterWedding.data) {
-        wx.showToast({ title: '邀请链接已失效', icon: 'none' });
-        return;
-      }
-
-      const inviterOpenid = inviterWedding.data._openid;
-      const inviterUserRes = await db.collection('users').where({ _openid: inviterOpenid }).get();
-      const inviterName = inviterUserRes.data.length > 0 ? (inviterUserRes.data[0].nickName || '你的伴侣') : '你的伴侣';
-
-      // 3. 弹窗询问是否加入
-      wx.showModal({
-        title: '协同备婚邀请',
-        content: `「${inviterName}」邀请你共同管理婚礼财务账本，是否接受？`,
-        confirmText: '接受邀请',
-        cancelText: '暂不接受',
-        success: async (res) => {
-          if (res.confirm) {
-            // 4. 检查自己是否完善了头像和昵称
-            const userInfo = app.globalData.userInfo;
-            if (!userInfo || !userInfo.avatarUrl || !userInfo.nickName) {
-              wx.showModal({
-                title: '完善个人信息',
-                content: '在加入账本前，请先完善你的头像和昵称，方便伴侣识别。',
-                showCancel: false,
-                confirmText: '去完善',
-                success: () => {
-                  wx.navigateTo({
-                    url: `/pages/profile/index?inviterWeddingId=${inviterWeddingId}`
-                  });
-                }
-              });
-            } else {
-              // 5. 已完善，直接执行绑定
-              await this.handleBindWedding(inviterWeddingId);
-            }
-          }
-        }
-      });
-
-    } catch (e) {
-      console.error('检查邀请失败', e);
-    }
-  },
-
-  // 绑定婚礼逻辑
-  async handleBindWedding(weddingId) {
-    wx.showLoading({ title: '加入备婚账本中...' })
-    try {
-      const db = wx.cloud.database()
-      const openid = app.globalData.openid
-      
-      // 更新婚礼信息的 partnerOpenid，实现双人关联
-      await db.collection('wedding_info').doc(weddingId).update({
-        data: {
-          partnerOpenid: openid,
-          partnerJoinedAt: db.serverDate(),
-          updatedAt: db.serverDate()
-        }
-      })
-
-      app.globalData.hasWedding = true
-      this.setData({ hasWedding: true })
-
-      wx.hideLoading()
-      wx.showModal({
-        title: '恭喜！',
-        content: '已成功加入协同备婚账本，开始共同记账吧！',
-        showCancel: false,
-        success: () => {
-          this.fetchBudgetData()
-        }
-      })
-
-    } catch (e) {
-      console.error('绑定婚礼失败', e)
-      wx.hideLoading()
-      wx.showToast({ title: '绑定失败，请重试', icon: 'none' })
-    }
   },
 
   // 头像点击
@@ -429,7 +285,7 @@ Page({
 
     return {
       title: `「${inviterName}」邀请你共同管理我们的婚礼财务账本！`,
-      path: `/pages/index/index?inviterWeddingId=${weddingId}`
+      path: `/pages/splash/index?inviterWeddingId=${weddingId}`
     }
   }
 })

@@ -1,0 +1,44 @@
+<view class="splash-page-container">
+  <!-- Loading State -->
+  <view wx:if="{{isLoading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+  <!-- Content State -->
+  <block wx:else>
+    <view class="splash-content">
+      <view class="splash-header animate-fade-in">
+        <!-- <text class="splash-title">婚礼财务管家</text> -->
+        <text class="splash-subtitle">让备婚花销更清晰，更贴心</text>
+      </view>
+      <view class="splash-features-card animate-slide-up">
+        <view class="feature-item">
+          <image class="feature-icon" src="../../images/index/icon1.png" mode="aspectFit"></image>
+          <view class="feature-info">
+            <text class="feature-title">清晰的预算管理</text>
+            <text class="feature-desc">科学设定各模块预算，消费不超支</text>
+          </view>
+        </view>
+        <view class="feature-item">
+          <image class="feature-icon" src="../../images/index/icon2.png" mode="aspectFit"></image>
+          <view class="feature-info">
+            <text class="feature-title">项目分类统计</text>
+            <text class="feature-desc">全方位婚礼服务分类，账目明明白白</text>
+          </view>
+        </view>
+        <view class="feature-item">
+          <image class="feature-icon" src="../../images/index/icon3.png" mode="aspectFit"></image>
+          <view class="feature-info">
+            <text class="feature-title">双人协同管理</text>
+            <text class="feature-desc">实时共享数据，两口子一起管账更贴心</text>
+          </view>
+        </view>
+      </view>
+      <view class="splash-footer animate-fade-in-delayed">
+        <button class="btn-start" bindtap="handleStartWedding" hover-class="btn-start-hover">
+          开启我的婚礼
+        </button>
+      </view>
+    </view>
+  </block>
+</view>
