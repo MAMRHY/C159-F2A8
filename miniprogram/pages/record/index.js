@@ -32,7 +32,11 @@ Page({
   async fetchRecords() {
     wx.showLoading({ title: '加载中' })
     try {
-      const res = await db.collection('expenses').orderBy('createdAt', 'desc').limit(100).get()
+      const res = await db.collection('expenses')
+        .where({ _openid: app.globalData.openid })
+        .orderBy('createdAt', 'desc')
+        .limit(100)
+        .get()
       // 规定大于0的数字是有效金额，小于0的数字为待定金额，保存的时候不允许输入小于0的金额，用于区分状态
       const allRecords = res.data.map(item => {
         const createdAtStr = item.createdAt ? this.formatDate(item.createdAt) : ''

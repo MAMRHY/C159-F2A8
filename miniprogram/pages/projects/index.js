@@ -39,7 +39,11 @@ Page({
     wx.showLoading({ title: '加载中' })
     try {
       // 1. 查询全部项目
-      const projectRes = await db.collection('projects').orderBy('createdAt', 'desc').limit(100).get()
+      const projectRes = await db.collection('projects')
+        .where({ _openid: app.globalData.openid })
+        .orderBy('createdAt', 'desc')
+        .limit(100)
+        .get()
       const rawProjects = projectRes.data
 
       if (rawProjects.length === 0) {
