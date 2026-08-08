@@ -106,6 +106,7 @@ Page({
         totalBudget = wedding.budget || 0;
         weddingDate = wedding.date || '';
         weddingId = wedding._id;
+        app.globalData.weddingId = weddingId;
         
         membersOpenids.push(wedding._openid);
         if (wedding.partnerOpenid) {
@@ -163,14 +164,22 @@ Page({
         countdownLabel = '未设置婚期';
       }
 
-      // 获取所有支出
+      // 获取当前婚礼支出
       const MAX_LIMIT = 100;
-      const countResult = await db.collection('expenses').count();
+      if (!weddingId) {
+        throw new Error('当前没有婚礼');
+      }
+      const expenseQuery = db.collection('expenses').where({ weddingId });
+      const countResult = await expenseQuery.count();
       const total = countResult.total;
       const batchTimes = Math.ceil(total / MAX_LIMIT);
       const tasks = [];
       for (let i = 0; i < batchTimes; i++) {
-        const promise = db.collection('expenses').skip(i * MAX_LIMIT).limit(MAX_LIMIT).get();
+        const promise = db.collection('expenses')
+          .where({ weddingId })
+          .skip(i * MAX_LIMIT)
+          .limit(MAX_LIMIT)
+          .get();
         tasks.push(promise);
       }
 

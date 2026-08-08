@@ -202,6 +202,7 @@ Page({
 
       // D. 修改全局 hasWedding
       app.globalData.hasWedding = true
+      app.globalData.weddingId = weddingId
 
       wx.hideLoading()
       wx.showModal({

@@ -38,9 +38,16 @@ Page({
   async fetchProjects() {
     wx.showLoading({ title: '加载中' })
     try {
-      // 1. 查询全部项目
+      const weddingId = app.globalData.weddingId
+      console.log('weddingId', weddingId)
+      if (!weddingId) {
+        this.setData({ allProjects: [], projects: [] })
+        return
+      }
+
+      // 1. 查询当前婚礼的项目
       const projectRes = await db.collection('projects')
-        .where({ _openid: app.globalData.openid })
+        .where({ weddingId })
         .orderBy('createdAt', 'desc')
         .limit(100)
         .get()
@@ -54,7 +61,10 @@ Page({
       // 2. 一次性查出所有项目下的 expenses（固定 2 次请求，不再是 N+1）
       const projectIds = rawProjects.map(p => p._id)
       const expenseRes = await db.collection('expenses')
-        .where({ projectId: _.in(projectIds) })
+        .where({
+          projectId: _.in(projectIds),
+          weddingId
+        })
         .get()
 
       // 3. 按 projectId 在 JS 端分组
@@ -181,10 +191,19 @@ Page({
     wx.showLoading({ title: '删除中' })
 
     try {
-      // 1. 先删除该项目下的所有费用
-      // 先查询出关联的费用记录
+      const weddingId = app.globalData.weddingId
+      if (!weddingId) {
+        throw new Error('当前没有婚礼')
+      }
+
+      const projectRes = await db.collection('projects').doc(deleteProjectId).get()
+      if (!projectRes.data || projectRes.data.weddingId !== weddingId) {
+        throw new Error('无权删除该项目')
+      }
+
+      // 1. 先删除该项目下当前婚礼的所有费用
       const expenseRes = await db.collection('expenses')
-        .where({ projectId: deleteProjectId })
+        .where({ projectId: deleteProjectId, weddingId })
         .get()
 
       // 逐条删除费用记录（小程序端不支持批量删除）

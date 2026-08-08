@@ -56,6 +56,12 @@ Page({
       const db = wx.cloud.database();
       
       if (this.data.isEdit) {
+        const weddingRes = await db.collection('wedding_info').doc(this.data.recordId).get()
+        const wedding = weddingRes.data
+        if (!wedding || wedding._openid !== app.globalData.openid && wedding.partnerOpenid !== app.globalData.openid) {
+          throw new Error('无权编辑该婚礼')
+        }
+        app.globalData.weddingId = wedding._id
         // 编辑模式：更新数据
         await db.collection('wedding_info').doc(this.data.recordId).update({
           data: {
@@ -69,7 +75,7 @@ Page({
         wx.showToast({ title: '修改成功', icon: 'success' });
       } else {
         // 创建模式：新增数据，小程序端插入数据会自动带上当前用户的 _openid，不能手动指定
-        await db.collection('wedding_info').add({
+        const addRes = await db.collection('wedding_info').add({
           data: {
             date,
             location,
@@ -80,6 +86,7 @@ Page({
         wx.hideLoading();
         wx.showToast({ title: '创建成功', icon: 'success' });
         // 更新全局状态
+        app.globalData.weddingId = addRes._id;
         app.globalData.hasWedding = true;
       }
 

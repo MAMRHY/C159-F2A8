@@ -50,6 +50,9 @@ Page({
     try {
       const res = await db.collection('projects').doc(this.data.projectId).get()
       const data = res.data
+      if (!data || data.weddingId !== app.globalData.weddingId) {
+        throw new Error('无权访问该项目')
+      }
       this.setData({
         name: data.name,
         typeId: data.typeId,
@@ -158,7 +161,14 @@ Page({
 
     wx.showLoading({ title: '保存中' })
     
+    const weddingId = app.globalData.weddingId
+    if (!weddingId) {
+      wx.hideLoading()
+      return wx.showToast({ title: '请先创建婚礼', icon: 'none' })
+    }
+
     const projectData = {
+      weddingId,
       name,
       typeId,
       typeName,
@@ -169,6 +179,10 @@ Page({
 
     try {
       if (isEdit) {
+        const existing = await db.collection('projects').doc(projectId).get()
+        if (!existing.data || existing.data.weddingId !== weddingId) {
+          throw new Error('无权编辑该项目')
+        }
         await db.collection('projects').doc(projectId).update({
           data: projectData
         })

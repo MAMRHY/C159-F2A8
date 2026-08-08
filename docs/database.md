@@ -1,6 +1,6 @@
 # 备婚记账 (WedLedger) 数据库设计
 
-本文档记录了小程序使用的云开发数据库（NoSQL）集合结构。
+本文档记录了小程序使用的云开发数据库（NoSQL）集合结构。项目和费用表中的 `weddingId` 关联 `wedding_info._id`，用于按婚礼隔离数据。
 
 ## 1. 婚礼基本信息表 (`wedding_info`)
 这一张表每个用户（或每对新人）只有一条记录，用于存储全局配置。
@@ -20,7 +20,7 @@
 | 字段名 | 类型 | 示例 / 说明 |
 | :--- | :--- | :--- |
 | `_id` | String | (自动生成) 记录唯一标识 |
-| `wedding_id` | String | 关联所属婚礼 |
+| `weddingId` | String | 关联 `wedding_info._id`，用于按婚礼隔离项目数据 |
 | `name` | String | 项目名称，如 "酒席-小天鹅洋湖" |
 | `type` | String | 项目类型，如 "酒店"、"婚纱照"、"礼服" |
 | `leader` | String | 负责人，如 "李惠权" |
@@ -33,7 +33,7 @@
 | 字段名 | 类型 | 示例 / 说明 |
 | :--- | :--- | :--- |
 | `_id` | String | (自动生成) 记录唯一标识 |
-| `wedding_id` | String | 关联所属婚礼 |
+| `weddingId` | String | 关联 `wedding_info._id`，用于按婚礼隔离费用数据 |
 | `project_id` | String | 关联 `projects` 表的 `_id` |
 | `expense_type` | String | 费用类型，如 "一次定金"、"尾款" |
 | `amount` | Number/Null | 金额，允许为空/null（对应“待定”逻辑） |

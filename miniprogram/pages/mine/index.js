@@ -26,9 +26,12 @@ Page({
       ).get();
       
       if (res.data.length > 0) {
-        this.setData({ weddingInfo: res.data[0] });
+        const weddingInfo = res.data[0]
+        app.globalData.weddingId = weddingInfo._id
+        this.setData({ weddingInfo })
       } else {
-        this.setData({ weddingInfo: null });
+        app.globalData.weddingId = null
+        this.setData({ weddingInfo: null })
       }
     } catch (e) {
       console.error(e);

@@ -193,6 +193,7 @@ Page({
       })
 
       app.globalData.hasWedding = true
+      app.globalData.weddingId = weddingId
       this.setData({ hasWedding: true })
 
       wx.hideLoading()

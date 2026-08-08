@@ -33,8 +33,14 @@ Page({
   async fetchRecords() {
     wx.showLoading({ title: '加载中' })
     try {
+      const weddingId = app.globalData.weddingId
+      if (!weddingId) {
+        this.setData({ allRecords: [] })
+        this.filterRecords()
+        return
+      }
       const res = await db.collection('expenses')
-        .where({ _openid: app.globalData.openid })
+        .where({ weddingId })
         .orderBy('createdAt', 'desc')
         .limit(100)
         .get()
@@ -168,6 +174,11 @@ Page({
     this.setData({ showDeleteDialog: false })
     wx.showLoading({ title: '删除中' })
     try {
+      const weddingId = app.globalData.weddingId
+      const recordRes = await db.collection('expenses').doc(deleteRecordId).get()
+      if (!weddingId || !recordRes.data || recordRes.data.weddingId !== weddingId) {
+        throw new Error('无权删除该费用')
+      }
       await db.collection('expenses').doc(deleteRecordId).remove()
       wx.showToast({ title: '删除成功', icon: 'success' })
       this.fetchRecords()

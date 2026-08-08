@@ -1,4 +1,5 @@
 // pages/record-add/index.js
+const app = getApp()
 const db = wx.cloud.database()
 
 Page({
@@ -48,6 +49,9 @@ Page({
     try {
       const res = await db.collection('expenses').doc(id).get()
       const record = res.data
+      if (!record || record.weddingId !== app.globalData.weddingId) {
+        throw new Error('无权访问该费用')
+      }
       this.setData({
         projectId: record.projectId || '',
         projectName: record.projectName || '',
@@ -71,7 +75,15 @@ Page({
 
   async fetchProjects() {
     try {
-      const res = await db.collection('projects').field({ name: true }).get()
+      const weddingId = app.globalData.weddingId
+      if (!weddingId) {
+        this.setData({ projects: [], filteredProjects: [] })
+        return
+      }
+      const res = await db.collection('projects')
+        .where({ weddingId })
+        .field({ name: true })
+        .get()
       this.setData({
         projects: res.data,
         filteredProjects: res.data,
@@ -269,12 +281,27 @@ Page({
     const parsedAmount = trimmedAmount ? parseFloat(trimmedAmount) : null
 
 
+    const weddingId = app.globalData.weddingId
+    if (!weddingId) {
+      return wx.showToast({ title: '请先创建婚礼', icon: 'none' })
+    }
+
     wx.showLoading({ title: '保存中' })
     try {
+      const projectRes = await db.collection('projects').doc(projectId).get()
+      if (!projectRes.data || projectRes.data.weddingId !== weddingId) {
+        throw new Error('项目不属于当前婚礼')
+      }
+
       if (editId) {
+        const expenseRes = await db.collection('expenses').doc(editId).get()
+        if (!expenseRes.data || expenseRes.data.weddingId !== weddingId) {
+          throw new Error('无权编辑该费用')
+        }
         // 编辑模式：更新现有记录
         await db.collection('expenses').doc(editId).update({
           data: {
+            weddingId,
             projectId,
             projectName,
             expenseTypeId,
@@ -292,6 +319,7 @@ Page({
         // 新增模式
         await db.collection('expenses').add({
           data: {
+            weddingId,
             projectId,
             projectName,
             expenseTypeId,
