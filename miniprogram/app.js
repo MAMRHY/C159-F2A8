@@ -6,7 +6,8 @@ App({
       // env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会请求到哪个云环境的资源
       // 此处请填入环境 ID, 环境 ID 可在微信开发者工具右上顶部工具栏点击云开发按钮打开获取
       env: "cloud1-d1g3j2yfxa7019d32",
-      openid: null,
+      openid: null, // 当前登录者
+      OwnerOpenid: null, // 数据归属者，非协作者模式下，两着相同，协作时为邀请者id
       hasWedding: false,
       userInfo: null,
       loginPromise: null
